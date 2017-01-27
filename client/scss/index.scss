@@ -1,0 +1,18 @@
+@import 'variables';
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  background-color: $brand-color;
+  border: none;
+  font-size: 14px;
+  color: #FFFFFF;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
