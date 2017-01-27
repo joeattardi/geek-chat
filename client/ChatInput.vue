@@ -1,12 +1,28 @@
 <template>
   <div id="chat-input">
-    <input ref="inputField" autofocus type="text" />
-    <button>Send</button>
+    <form @submit="sendMessage">
+      <input ref="inputField" autofocus v-model="message" type="text" />
+      <button>Send</button>
+    </form>
   </div>
 </template>
 
 <script>
+  import socketClient, { events } from './socketClient';
+
   export default {
+    data() {
+      return {
+        message: ''
+      }
+    },
+    methods: {
+      sendMessage(event) {
+        event.preventDefault();
+        events.$emit('sendMessage', this.message);
+        this.message = '';
+      }
+    },
     mounted() {
       this.$refs.inputField.focus();
     }
@@ -21,6 +37,11 @@
     background-color: $panel-color;
     padding: 10px;
     display: flex;
+
+    form {
+      display: flex;
+      flex-grow: 1;
+    }
 
     input {
       flex-grow: 1;

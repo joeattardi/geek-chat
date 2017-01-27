@@ -17,6 +17,8 @@ const io = new Server(server);
 io.on('connection', socket => {
   console.log('New user connected');
 
-  io.emit('userList', ['joe', 'bob', 'baz']);
+  socket.on('chatMessage', (message, room) => {
+    io.emit('newMessage', message);
+  });
 });
 
