@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack && cp index.html dist",
+    "lint": "eslint --ext .js,.vue client server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

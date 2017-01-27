@@ -3,5 +3,8 @@ module.exports = {
     "plugins": [
       "import",
       "html"
-    ]
+    ],
+    "rules": {
+      "comma-dangle": "off"
+    }
 };

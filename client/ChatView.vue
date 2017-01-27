@@ -19,7 +19,7 @@
     mounted() {
       this.$refs.inputField.focus();
     }
-  }
+  };
 </script>
 
 <style lang="sass">
