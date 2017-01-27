@@ -3,9 +3,9 @@ import VueRouter from 'vue-router';
 
 import './scss/index.scss';
 import App from './App.vue';
-
 import Login from './Login.vue';
 import ChatView from './ChatView.vue';
+import socketClient from './socketClient';
 
 Vue.use(VueRouter);
 
@@ -22,3 +22,5 @@ new Vue({
   router,
   render: h => h(App)
 });
+
+socketClient.init();
