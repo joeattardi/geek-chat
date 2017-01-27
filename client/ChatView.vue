@@ -4,20 +4,28 @@
       GeekChat
     </header>
     <div id="chat-container">
+      <div id="chat-header">
+        <h2>Main Room</h2>
+      </div>
       <div id="chat-content">
+        <chat-message-list />
+        <room-user-list />
       </div>
-      <div id="chat-input">
-        <input ref="inputField" autofocus type="text" />
-        <button>Send</button>
-      </div>
+      <chat-input />
     </div>
   </div>
 </template>
 
 <script>
+  import ChatInput from './ChatInput.vue';
+  import ChatMessageList from './ChatMessageList.vue';
+  import RoomUserList from './RoomUserList.vue';
+
   export default {
-    mounted() {
-      this.$refs.inputField.focus();
+    components: {
+      'chat-input': ChatInput,
+      'chat-message-list': ChatMessageList,
+      'room-user-list': RoomUserList
     }
   };
 </script>
@@ -44,25 +52,22 @@
       flex-direction: column;
       flex-grow: 1;
 
-      #chat-content {
-        flex-grow: 1;
+      #chat-header {
+        background: $panel-color;
+        border-bottom: 1px solid $panel-border-color;
+        padding: 0.5em;
+
+        h2 {
+          font-size: 1.2em;
+          font-weight: bold;
+          margin: 0;
+        }
       }
 
-      #chat-input {
-        border-top: 1px solid #AAAAAA;
-        background-color: #EEEEEE;
-        padding: 10px;
+      #chat-content {
         display: flex;
-
-        input {
-          flex-grow: 1;
-          margin-right: 10px;
-          height: 2em;
-          align-self: center;
-        }
+        flex-grow: 1;
       }
     }
   }
-
-
 </style>

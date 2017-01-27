@@ -36,7 +36,7 @@
     }
 
     #login-form {
-      width: 50%;
+      width: 20em;
       margin: auto;
 
       input {
