@@ -3,8 +3,16 @@
     <h1>GeekChat</h1>
     <div id="login-form">
       <form @submit="login">
-        <input autofocus type="text" v-model="username" placeholder="Username" />
-        <button>Log In</button>
+        <div>
+          <label for="username"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i></label>
+          <input ref="usernameField" autofocus type="text" id="username" v-model="username" placeholder="Username" />
+        </div>
+        <div>
+          <label for="password"><i class="fa fa-lg fa-lock" aria-hidden="true"></i></label>
+          <input type="password" id="password" v-model="password" placeholder="Password" />
+        </div>
+        <div><button>Log In</button></div>
+        Don't have an account? <a href="#">Sign up</a>
       </form>
     </div>
   </div>
@@ -14,8 +22,12 @@
   export default {
     data() {
       return {
-        username: ''
+        username: '',
+        password: ''
       };
+    },
+    mounted() {
+      this.$refs.usernameField.focus();      
     },
     methods: {
       login(event) {
@@ -30,18 +42,45 @@
   @import './scss/variables';
 
   #login-box {
+    background-color: $panel-color;
+    border: 1px solid $panel-border-color;
+    width: 30rem;
+    padding: 1rem;
+    border-radius: 5px;
+
     h1 {
       font-family: 'Montserrat', sans-serif;
       font-size: 3em;
+      margin: 0;
     }
 
     #login-form {
       width: 20em;
       margin: auto;
 
+      div {
+        margin: 0.5em;
+
+        i {
+          position: relative;
+          right: -1.5em;
+          width: 1em;
+          color: #AAAAAA;
+        }
+      }
+
       input {
+        font-size: 1em;
         height: 2em;
-        width: 50%;
+        width: 15rem;
+        outline: none;
+        padding-left: 2em;
+      }
+
+      button {
+        width: 15rem;
+        position: relative;
+        left: 1em;
       }
     }
 
