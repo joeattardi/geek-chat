@@ -21,4 +21,13 @@ button {
   &:hover {
     background-color: lighten($brand-color, 15%);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    &:hover {
+      background-color: $brand-color;
+    }
+  }
 }

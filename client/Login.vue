@@ -11,7 +11,7 @@
           <label for="password"><i class="fa fa-lg fa-lock" aria-hidden="true"></i></label>
           <input type="password" id="password" v-model="password" placeholder="Password" />
         </div>
-        <div><button>Log In</button></div>
+        <div><button :disabled="!isValid()">Log In</button></div>
         Don't have an account? <a href="#">Sign up</a>
       </form>
     </div>
@@ -33,6 +33,9 @@
       login(event) {
         event.preventDefault();
         this.$router.push('/chat');
+      },
+      isValid() {
+        return this.username && this.password;
       }
     }
   };
