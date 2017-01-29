@@ -12,7 +12,7 @@
           <input type="password" id="password" v-model="password" placeholder="Password" />
         </div>
         <div><button :disabled="!isValid()">Log In</button></div>
-        Don't have an account? <a href="#">Sign up</a>
+        Don't have an account? <router-link to="/signup"><strong>Sign up</strong></router-link>
       </form>
     </div>
   </div>
@@ -78,6 +78,10 @@
         width: 15rem;
         outline: none;
         padding-left: 2em;
+
+        &:focus {
+          border: 1px solid #000000;
+        }
       }
 
       button {

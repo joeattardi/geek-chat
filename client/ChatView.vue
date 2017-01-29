@@ -20,8 +20,12 @@
   import ChatInput from './ChatInput.vue';
   import ChatMessageList from './ChatMessageList.vue';
   import RoomUserList from './RoomUserList.vue';
+  import socketClient from './socketClient';
 
   export default {
+    created() {
+      socketClient.init();
+    },
     components: {
       'chat-input': ChatInput,
       'chat-message-list': ChatMessageList,
