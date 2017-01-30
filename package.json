@@ -2,8 +2,9 @@
   "name": "geek-chat",
   "version": "1.0.0",
   "description": "A chat app powered by Node.js and Vue.js",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
+    "start:dev": "nodemon server/index.js",
     "build": "webpack && cp index.html dist",
     "lint": "eslint --ext .js,.vue client server",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,11 +20,16 @@
   },
   "homepage": "https://github.com/joeattardi/geek-chat#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.0",
+    "body-parser": "^1.16.0",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.1",
+    "mongoose": "^4.8.0",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.2",
     "validator": "^6.2.1",
     "vue": "^2.1.10",
+    "vue-resource": "^1.0.3",
     "vue-router": "^2.2.0"
   },
   "devDependencies": {
@@ -36,6 +42,7 @@
     "eslint-plugin-html": "^2.0.0",
     "eslint-plugin-import": "^2.2.0",
     "node-sass": "^4.3.0",
+    "nodemon": "^1.11.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "vue-loader": "^10.0.3",
