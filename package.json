@@ -4,7 +4,7 @@
   "description": "A chat app powered by Node.js and Vue.js",
   "main": "server/index.js",
   "scripts": {
-    "start:dev": "nodemon server/index.js",
+    "dev": "webpack -w",
     "build": "webpack && cp index.html dist",
     "lint": "eslint --ext .js,.vue client server",
     "test": "echo \"Error: no test specified\" && exit 1"
