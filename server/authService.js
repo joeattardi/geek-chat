@@ -11,8 +11,8 @@ exports.generateNewToken = function generateNewToken(userId) {
   return token;
 };
 
-exports.validateToken = function validateToken(token) {
-  
+exports.validateToken = function validateToken(token, callback) {
+  jwt.verify(token, process.env.JWT_SECRET, callback); 
 }
 
 exports.hashPassword = function hashPassword(password) {

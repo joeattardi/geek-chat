@@ -21,5 +21,9 @@ export default {
       this.socket.emit(CHAT_MESSAGE, message, 'foo');
     });
   },
+
+  authenticate(jwt) {
+    this.socket.emit('authenticate', jwt);
+  }
 };
 

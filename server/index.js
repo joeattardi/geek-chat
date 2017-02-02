@@ -1,10 +1,10 @@
 const http = require('http');
-const Server = require('socket.io');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const authService = require('./authService');
+const socketServer = require('./socketServer');
 const User = require('./models/User');
 
 const port = 3000;
@@ -18,6 +18,8 @@ const server = http.createServer(app);
 server.listen(port, () => {
   console.log(`GeekChat listening on port ${port} (http)`);
 });
+
+socketServer.init(server);
 
 mongoose.Promise = global.Promise;
 if (!process.env.MONGODB_URI) {
@@ -69,12 +71,4 @@ app.post('/signup', (req, res) => {
   });
 });
 
-const io = new Server(server);
-io.on('connection', socket => {
-  console.log('New user connected');
-
-  socket.on('chatMessage', (message, room) => {
-    io.emit('newMessage', message);
-  });
-});
 

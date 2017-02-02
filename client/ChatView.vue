@@ -25,6 +25,7 @@
   export default {
     created() {
       socketClient.init();
+      socketClient.authenticate(localStorage.getItem('token'));
     },
     components: {
       'chat-input': ChatInput,
