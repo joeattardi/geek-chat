@@ -30,6 +30,29 @@ mongoose.connect(process.env.MONGODB_URI)
     process.exit(1);
   });
 
+app.post('/login', (req, res) => {
+  if (!req.body.username || !req.body.password) {
+    res.status(400).json({
+      result: 'error',
+      message: 'Username and password are required'
+    });
+  } else {
+    User.findOne({ username: req.body.username }).then(foundUser => {
+      if (!foundUser || !authService.validatePassword(req.body.password, foundUser.password)) {
+        res.status(401).json({
+          result: 'error',
+          message: 'Invalid username or password'
+        });
+      } else {
+        res.status(200).json({
+          result: 'success',
+          token: authService.generateNewToken(foundUser._id)
+        }); 
+      }
+    });
+  }
+});
+
 app.post('/signup', (req, res) => {
   const user = new User({
     username: req.body.username,

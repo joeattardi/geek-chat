@@ -3,6 +3,7 @@
     <h1>GeekChat</h1>
     <div id="login-form">
       <form @submit="login">
+        <div class="error" v-if="loginIncorrect">Invalid username or password.</div>
         <div>
           <label for="username"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i></label>
           <input ref="usernameField" autofocus type="text" id="username" v-model="username" placeholder="Username" />
@@ -23,7 +24,9 @@
     data() {
       return {
         username: '',
-        password: ''
+        password: '',
+        submitting: false,
+        loginIncorrect: false
       };
     },
     mounted() {
@@ -32,7 +35,22 @@
     methods: {
       login(event) {
         event.preventDefault();
-        this.$router.push('/chat');
+
+        this.submitting = true;
+        this.$http.post('/login', {
+          username: this.username,
+          password: this.password
+        }).then(response => {
+          if (response.status === 200) {
+            localStorage.setItem('token', response.body.token);
+            this.$router.push('/chat');
+          }
+        }).catch(response => {
+          this.loginIncorrect = true;
+        }).finally(() => {
+          this.submitting = false;
+        });
+
       },
       isValid() {
         return this.username && this.password;
@@ -72,15 +90,21 @@
         }
       }
 
+      .error {
+        color: $error-color;
+      }
+
       input {
         font-size: 1em;
         height: 2em;
         width: 15rem;
         outline: none;
         padding-left: 2em;
+        border: 1px solid #CCCCCC;
+        border-radius: 2px;
 
         &:focus {
-          border: 1px solid #000000;
+          border: 1px solid #999999;
         }
       }
 

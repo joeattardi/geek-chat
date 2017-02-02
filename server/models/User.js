@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const authService = require('../authService');
 
 const userSchema = mongoose.Schema({
   username: {
@@ -22,9 +22,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.pre('save', function (next) { 
   if (this.isModified('password')) {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(this.password, salt); 
-    this.password = hash;
+    this.password = authService.hashPassword(this.password);
     next();
   } else {
     next();
