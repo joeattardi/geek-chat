@@ -13,12 +13,16 @@ export default {
       events.$emit('userList', userList);
     });
 
-    this.socket.on('newMessage', message => {
-      events.$emit('newMessage', message);
+    this.socket.on('newMessage', (user, text, timestamp) => {
+      events.$emit('newMessage', {
+        user,
+        text, 
+        timestamp
+      });
     });
 
     events.$on('sendMessage', message => {
-      this.socket.emit(CHAT_MESSAGE, message, 'foo');
+      this.socket.emit(CHAT_MESSAGE, message);
     });
   },
 

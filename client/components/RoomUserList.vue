@@ -36,6 +36,7 @@
       margin: 0;
 
       li {
+        font-size: 0.8em;
         list-style-type: none;
       }
     }

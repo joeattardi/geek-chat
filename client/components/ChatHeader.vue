@@ -1,6 +1,9 @@
 <template>
   <header>
-    <h1>GeekChat</h1>
+    <h1>
+      <i class="fa fa-lg fa-comment-o" aria-hidden="true"></i>
+      GeekChat
+    </h1>
     <div id="user-info">
       <i class="fa fa-user" aria-hidden="true"></i> 
       {{ user }}

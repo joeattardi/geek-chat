@@ -10,6 +10,11 @@ function getUserList() {
   return connectedUsers.map(userRecord => _.pick(userRecord.user, ['username', 'fullName'])); 
 }
 
+function getUserForSocket(socket) {
+  const userRecord = _.find(connectedUsers, user => user.socket === socket);
+  return _.pick(userRecord.user, ['username', 'fullName']);
+}
+
 exports.init = function init(server) {
   const io = new Server(server);
   io.on('connection', socket => {
@@ -37,8 +42,8 @@ exports.init = function init(server) {
       io.emit('userList', getUserList());
     });
 
-    socket.on('chatMessage', (message, room) => {
-      io.emit('newMessage', message);
+    socket.on('chatMessage', (text) => {
+      io.emit('newMessage', getUserForSocket(socket), text, new Date());
     });
   });
 };
