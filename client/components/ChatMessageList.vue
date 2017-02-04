@@ -31,5 +31,6 @@
   #chat-messages {
     flex-grow: 1;
     border-right: 1px solid $panel-border-color;
+    overflow-y: scroll;
   }
 </style>

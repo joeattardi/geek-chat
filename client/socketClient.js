@@ -10,7 +10,7 @@ export default {
     this.socket = io();
 
     this.socket.on('userList', userList => {
-      console.log(userList);
+      events.$emit('userList', userList);
     });
 
     this.socket.on('newMessage', message => {

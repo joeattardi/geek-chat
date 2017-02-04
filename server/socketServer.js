@@ -25,7 +25,7 @@ exports.init = function init(server) {
               io.sockets.connected[socket.id] = socket;
               connectedUsers.push({ user, socket });
 
-              console.log(getUserList());
+              io.emit('userList', getUserList());
             }
           });
         }
@@ -34,6 +34,7 @@ exports.init = function init(server) {
 
     socket.on('disconnect', () => {
       connectedUsers = connectedUsers.filter(userRecord => userRecord.socket !== socket);
+      io.emit('userList', getUserList());
     });
 
     socket.on('chatMessage', (message, room) => {
