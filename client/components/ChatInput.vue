@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import socketClient, { events } from './socketClient';
+  import socketClient, { events } from '../socketClient';
 
   export default {
     data() {
@@ -30,7 +30,7 @@
 </script>
 
 <style lang="sass">
-  @import './scss/variables';
+  @import '../scss/variables';
 
   #chat-input {
     border-top: 1px solid $panel-border-color;

@@ -2,34 +2,31 @@
   <div id="signup-box">
     <h1>Sign Up</h1>
     <form @submit="signup" id="signup-form">
+      <div v-if="signupError" class="error">{{ signupError }}</div>
       <div>
         <label for="name"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i></label>
-        <input :disabled="submitting" ref="nameField" autofocus type="text" id="name" v-model="name" placeholder="Full Name" />
+        <input ref="nameField" autofocus type="text" id="name" v-model="name" placeholder="Full Name" />
       </div>
       <div>
         <label for="username"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i></label>
-        <input :disabled="submitting" ref="usernameField" type="text" id="username" v-model="username" placeholder="Username" />
+        <input ref="usernameField" type="text" id="username" v-model="username" placeholder="Username" />
       </div>
       <div>
         <label for="email"><i class="fa fa-lg fa-envelope-o" aria-hidden="true"></i></label>
-        <input :disabled="submitting" ref="emailField" type="text" id="email" v-model="email" placeholder="Email" />
+        <input ref="emailField" type="text" id="email" v-model="email" placeholder="Email" />
       </div>
       <div>
         <label for="password"><i class="fa fa-lg fa-lock" aria-hidden="true"></i></label>
-        <input :disabled="submitting" ref="passwordField" type="password" id="password" v-model="password" placeholder="Password" />
+        <input ref="passwordField" type="password" id="password" v-model="password" placeholder="Password" />
       </div>
       <div>
         <label for="passwordConfirm"><i class="fa fa-lg fa-lock" aria-hidden="true"></i></label>
-        <input :disabled="submitting" ref="passwordConfirmField" type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password" />
+        <input ref="passwordConfirmField" type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password" />
       </div>
       <div>
         <button v-if="!submitting" :disabled="!validate()">Complete Signup</button>
         <button v-else disabled>
-          <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-          </div>
+          <spinner />
         </button>
       </div>
     </form>
@@ -38,8 +35,12 @@
 
 <script>
   import validator from 'validator';
+  import Spinner from './Spinner.vue';
 
   export default {
+    components: {
+      spinner: Spinner
+    },
     data() {
       return {
         username: '',
@@ -47,6 +48,7 @@
         passwordConfirm: '',
         email: '',
         name: '',
+        signupError: '',
         submitting: false
       };
     },
@@ -78,6 +80,14 @@
             localStorage.setItem('token', response.body.token);
             this.$router.push('/chat');
           }
+        }).catch(response => {
+          this.submitting = false;
+          this.signupError = response.body.message;
+
+          if (response.body.code === 'USERNAME_EXISTS') {
+            this.username = '';
+            this.$refs.usernameField.focus();
+          }
         });
       }
     }
@@ -85,8 +95,7 @@
 </script>
 
 <style lang="sass">
-  @import './scss/variables';
-  @import './scss/spinner';
+  @import '../scss/variables';
 
   #signup-box {
     background-color: $panel-color;
@@ -124,6 +133,10 @@
         }
       }
 
+      .error {
+        color: $error-color;
+      }
+
       input {
         font-size: 1em;
         height: 2em;
@@ -135,11 +148,6 @@
 
         &:focus {
           border: 1px solid #999999;
-        }
-
-        &:disabled {
-          background-color: #DDDDDD;
-          opacity: 0.5;
         }
       }
 

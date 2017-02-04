@@ -4,7 +4,8 @@ const authService = require('../authService');
 const userSchema = mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   fullName: {
     type: String,

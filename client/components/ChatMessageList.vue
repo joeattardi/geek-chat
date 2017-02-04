@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import socketClient, { events } from './socketClient';
+  import socketClient, { events } from '../socketClient';
 
   export default {
     created() {
@@ -26,7 +26,7 @@
 </script>
 
 <style lang="sass">
-  @import './scss/variables';
+  @import '../scss/variables';
 
   #chat-messages {
     flex-grow: 1;

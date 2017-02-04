@@ -17,7 +17,7 @@ exports.validateToken = function validateToken(token, callback) {
 
 exports.hashPassword = function hashPassword(password) {
   const salt = bcrypt.genSaltSync(SALT_ROUNDS);
-  return bcrypt.hashSync(this.password, salt); 
+  return bcrypt.hashSync(password, salt); 
 }
 
 exports.validatePassword = function validatePassword(password, hash) {

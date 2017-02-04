@@ -17,6 +17,13 @@ a {
   }
 }
 
+input {
+  &:disabled {
+    background-color: #DDDDDD;
+    opacity: 0.5;
+  }
+}
+
 button {
   background-color: $brand-color;
   border-radius: 5px;

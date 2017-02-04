@@ -1,10 +1,8 @@
 <template>
   <div id="content">
-    <header>
-      GeekChat
-    </header>
+    <chat-header />
     <div id="chat-container">
-      <div id="chat-header">
+      <div id="chat-room-header">
         <h2>Main Room</h2>
       </div>
       <div id="chat-content">
@@ -17,17 +15,32 @@
 </template>
 
 <script>
+  import ChatHeader from './ChatHeader.vue';
   import ChatInput from './ChatInput.vue';
   import ChatMessageList from './ChatMessageList.vue';
   import RoomUserList from './RoomUserList.vue';
-  import socketClient from './socketClient';
+  import socketClient from '../socketClient';
 
   export default {
+    beforeRouteEnter(to, from, next) {
+      if (!localStorage.getItem('token')) {
+        next('/login');
+      } else {
+        next();
+      }
+    },
     created() {
+      const token = localStorage.getItem('token');
       socketClient.init();
-      socketClient.authenticate(localStorage.getItem('token'));
+      socketClient.authenticate(token);
+
+      this.$store.dispatch('getUser', token).catch(error => {
+        localStorage.removeItem('token');
+        this.$router.push('/login');
+      });
     },
     components: {
+      'chat-header': ChatHeader,
       'chat-input': ChatInput,
       'chat-message-list': ChatMessageList,
       'room-user-list': RoomUserList
@@ -36,28 +49,19 @@
 </script>
 
 <style lang="sass">
-  @import './scss/variables';
+  @import '../scss/variables';
 
   #content {
     display: flex;
     flex-direction: column;
     height: 100vh;
 
-    header {
-      background-color: $brand-color;
-      padding: 10px;
-      color: #FFFFFF;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
     #chat-container {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
 
-      #chat-header {
+      #chat-room-header {
         background: $panel-color;
         border-bottom: 1px solid $panel-border-color;
         padding: 0.5em;

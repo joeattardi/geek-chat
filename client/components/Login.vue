@@ -12,7 +12,12 @@
           <label for="password"><i class="fa fa-lg fa-lock" aria-hidden="true"></i></label>
           <input type="password" id="password" v-model="password" placeholder="Password" />
         </div>
-        <div><button :disabled="!isValid()">Log In</button></div>
+        <div>
+          <button v-if="!submitting" :disabled="!isValid()">Log In</button>
+          <button v-else disabled>
+            <spinner />
+          </button>
+        </div>
         Don't have an account? <router-link to="/signup"><strong>Sign up</strong></router-link>
       </form>
     </div>
@@ -20,7 +25,12 @@
 </template>
 
 <script>
+  import Spinner from './Spinner.vue';
+
   export default {
+    components: {
+      spinner: Spinner
+    },
     data() {
       return {
         username: '',
@@ -47,10 +57,12 @@
           }
         }).catch(response => {
           this.loginIncorrect = true;
+          this.username = '';
+          this.password = '';
+          this.$refs.usernameField.focus();
         }).finally(() => {
           this.submitting = false;
         });
-
       },
       isValid() {
         return this.username && this.password;
@@ -60,7 +72,7 @@
 </script>
 
 <style lang="sass">
-  @import './scss/variables';
+  @import '../scss/variables';
 
   #login-box {
     background-color: $panel-color;
@@ -88,6 +100,15 @@
           width: 1em;
           color: #AAAAAA;
         }
+
+        &.spinner {
+          margin: 0;
+
+          div {
+            margin: 0;
+          }
+        }
+
       }
 
       .error {
