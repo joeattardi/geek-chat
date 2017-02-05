@@ -28,6 +28,11 @@ export default {
 
   authenticate(jwt) {
     this.socket.emit('authenticate', jwt);
+  },
+
+  disconnect() {
+    this.socket.disconnect();
+    events.$off('sendMessage');
   }
 };
 

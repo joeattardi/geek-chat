@@ -13,10 +13,13 @@
 </template>
 
 <script>
+  import socketClient from '../socketClient';
+
   export default {
     methods: {
       logout(event) {
         event.preventDefault();
+        socketClient.disconnect();
         localStorage.removeItem('token');
         this.$store.dispatch('logout');
         this.$router.push('/');
