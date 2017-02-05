@@ -7,7 +7,8 @@
     "dev": "webpack -w",
     "build": "webpack && cp index.html dist",
     "lint": "eslint --ext .js,.vue client server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack -p && cp index.html dist && cp favicon.png dist && node server/index.js"
   },
   "repository": {
     "type": "git",
