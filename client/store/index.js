@@ -18,7 +18,9 @@ export default new Vuex.Store({
     },
 
     clearUser(state) {
-      delete state.user;
+      state.user = {
+        fullName: ''
+      };
     }
   }
 });
