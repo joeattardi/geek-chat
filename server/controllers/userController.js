@@ -69,13 +69,14 @@ module.exports = {
         token: authService.generateNewToken(savedUser._id)
       });
     }).catch(error => {
-      if (error.code !== constants.MONGO_ERROR_DUPLICATE_KEY) {
+      if (error.code === constants.MONGO_ERROR_DUPLICATE_KEY) {
         res.status(400).json({
           result: constants.API_RESULT_ERROR,
           code: constants.ERROR_USERNAME_EXISTS,
           message: 'That username is already taken.'
         }); 
       } else {
+        console.log(error);
         res.status(500).json({
           result: constants.API_RESULT_ERROR,
           code: constants.ERROR_GENERIC,
