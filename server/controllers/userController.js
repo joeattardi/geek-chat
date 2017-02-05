@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const request = require('request');
 
 const User = require('../models/User');
 const authService = require('../authService');
@@ -56,31 +57,45 @@ module.exports = {
   },
 
   signup(req, res) {
-    const user = new User({
-      username: req.body.username,
-      password: req.body.password,
-      fullName: req.body.name,
-      email: req.body.email
-    });
-
-    user.save().then(savedUser => {
-      res.status(201).json({
-        result: constants.API_RESULT_SUCCESS,
-        token: authService.generateNewToken(savedUser._id)
-      });
-    }).catch(error => {
-      if (error.code === constants.MONGO_ERROR_DUPLICATE_KEY) {
+    request.post('https://www.google.com/recaptcha/api/siteverify', {
+      form: {
+        secret: process.env.RECAPTCHA_SECRET,
+        response: req.body.recaptchaResult
+      } 
+    }, (error, response, body) => {
+      if (!JSON.parse(body).success) {
         res.status(400).json({
           result: constants.API_RESULT_ERROR,
-          code: constants.ERROR_USERNAME_EXISTS,
-          message: 'That username is already taken.'
-        }); 
+          code: constants.ERROR_INVALID_CAPTCHA
+        });
       } else {
-        console.log(error);
-        res.status(500).json({
-          result: constants.API_RESULT_ERROR,
-          code: constants.ERROR_GENERIC,
-          message: 'An unexpected error has occurred.'
+        const user = new User({
+          username: req.body.username,
+          password: req.body.password,
+          fullName: req.body.name,
+          email: req.body.email
+        });
+
+        user.save().then(savedUser => {
+          res.status(201).json({
+            result: constants.API_RESULT_SUCCESS,
+            token: authService.generateNewToken(savedUser._id)
+          });
+        }).catch(error => {
+          if (error.code === constants.MONGO_ERROR_DUPLICATE_KEY) {
+            res.status(400).json({
+              result: constants.API_RESULT_ERROR,
+              code: constants.ERROR_USERNAME_EXISTS,
+              message: 'That username is already taken.'
+            }); 
+          } else {
+            console.log(error);
+            res.status(500).json({
+              result: constants.API_RESULT_ERROR,
+              code: constants.ERROR_GENERIC,
+              message: 'An unexpected error has occurred.'
+            });
+          }
         });
       }
     });
