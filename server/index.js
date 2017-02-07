@@ -2,6 +2,7 @@ const http = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const winston = require('winston');
 
 const dbConnection = require('./dbConnection');
 const socketServer = require('./socketServer');
@@ -17,6 +18,9 @@ app.use('/', router);
 
 const server = http.createServer(app);
 server.listen(port, () => {
+  console.log('#############################################');
+  console.log('#             G E E K C H A T               #');
+  console.log('#############################################');
   console.log(`GeekChat listening on port ${port} (http)`);
 });
 
