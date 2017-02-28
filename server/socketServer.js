@@ -47,8 +47,8 @@ exports.init = function init(server) {
       io.emit('userList', getUserList());
     });
 
-    socket.on('chatMessage', (text) => {
-      io.emit('newMessage', getUserForSocket(socket), text, new Date());
+    socket.on('chatMessage', (message) => {
+      io.emit('newMessage', getUserForSocket(socket), message.message, new Date());
     });
   });
 };

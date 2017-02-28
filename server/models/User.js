@@ -18,6 +18,11 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  rooms: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Room',
+    default: []
   }
 });
 

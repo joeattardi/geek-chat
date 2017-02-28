@@ -19,7 +19,10 @@
     methods: {
       sendMessage(event) {
         event.preventDefault();
-        events.$emit('sendMessage', this.message);
+        events.$emit('sendMessage', {
+          message: this.message, 
+          room: this.$store.state.currentRoom
+        });
         this.message = '';
       }
     },

@@ -17,19 +17,23 @@ module.exports = {
         });
       }
 
-      User.findById(decoded.sub).then(user => {
-        if (user) {
-          res.status(200).json({
-            result: constants.API_RESULT_SUCCESS,
-            user: _.pick(user, ['_id', 'username', 'fullName', 'email'])
-          });
-        } else {
-          return res.status(401).json({
-            result: constants.API_RESULT_ERROR,
-            result: 'Invalid user'
-          });
-        }
-      });
+      User.findById(decoded.sub)
+        .populate({
+          path: 'rooms',
+          model: 'Room'
+        }).then(user => {
+          if (user) {
+            res.status(200).json({
+              result: constants.API_RESULT_SUCCESS,
+              user: _.pick(user, ['_id', 'username', 'fullName', 'email', 'rooms'])
+            });
+          } else {
+            return res.status(401).json({
+              result: constants.API_RESULT_ERROR,
+              result: 'Invalid user'
+            });
+          }
+        });
     });
   },
   

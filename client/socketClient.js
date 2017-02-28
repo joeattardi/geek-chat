@@ -21,8 +21,8 @@ export default {
       });
     });
 
-    events.$on('sendMessage', message => {
-      this.socket.emit(CHAT_MESSAGE, message);
+    events.$on('sendMessage', options => {
+      this.socket.emit(CHAT_MESSAGE, options);
     });
   },
 

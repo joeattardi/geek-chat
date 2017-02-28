@@ -1,15 +1,19 @@
 <template>
   <div id="content">
     <chat-header />
-    <div id="chat-container">
-      <div id="chat-room-header">
-        <h2>Main Room</h2>
+    <div id="main">
+      <room-list />
+      <div id="chat-container">
+        <div id="chat-room-header">
+          <div id="chat-room-name">{{ currentRoom.name }}</div>
+          <div id="chat-room-topic">{{ currentRoom.topic }}</div>
+        </div>
+        <div id="chat-content">
+          <chat-message-list />
+          <room-user-list />
+        </div>
+        <chat-input />
       </div>
-      <div id="chat-content">
-        <chat-message-list />
-        <room-user-list />
-      </div>
-      <chat-input />
     </div>
   </div>
 </template>
@@ -19,6 +23,7 @@
   import ChatInput from './ChatInput.vue';
   import ChatMessageList from './ChatMessageList.vue';
   import RoomUserList from './RoomUserList.vue';
+  import RoomList from './RoomList.vue';
   import socketClient from '../socketClient';
 
   export default {
@@ -39,10 +44,16 @@
         this.$router.push('/login');
       });
     },
+    computed: {
+      currentRoom() {
+        return this.$store.state.currentRoom;
+      }
+    },
     components: {
       'chat-header': ChatHeader,
       'chat-input': ChatInput,
       'chat-message-list': ChatMessageList,
+      'room-list': RoomList,
       'room-user-list': RoomUserList
     }
   };
@@ -56,6 +67,11 @@
     flex-direction: column;
     height: 100vh;
 
+    #main {
+      display: flex;
+      height: 100vh;
+    }
+
     #chat-container {
       display: flex;
       flex-direction: column;
@@ -65,6 +81,15 @@
         background: $panel-color;
         border-bottom: 1px solid $panel-border-color;
         padding: 0.5em;
+
+        #chat-room-name {
+          font-size: 1em;
+          font-weight: bold;
+        }
+
+        #chat-room-topic {
+          font-size: 0.75em;
+        }
 
         h2 {
           font-size: 1.2em;

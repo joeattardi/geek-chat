@@ -10,11 +10,21 @@ export default new Vuex.Store({
   state: {
     user: {
       fullName: ''
-    }
+    },
+    rooms: [],
+    currentRoom: ''
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+
+    setCurrentRoom(state, room) {
+      state.currentRoom = room;
+    },
+
+    setRooms(state, rooms) {
+      state.rooms = rooms;
     },
 
     clearUser(state) {
