@@ -12,11 +12,16 @@ export default new Vuex.Store({
       fullName: ''
     },
     rooms: [],
-    currentRoom: ''
+    currentRoom: '',
+    roomListWidth: 200
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+
+    resizeRoomList(state, width) {
+      state.roomListWidth = width;
     },
 
     setCurrentRoom(state, room) {

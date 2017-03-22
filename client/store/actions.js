@@ -11,6 +11,10 @@ export function getRooms(context, token) {
   });
 }
 
+export function resizeRoomList(context, width) {
+  context.commit('resizeRoomList', width);
+}
+
 export function setCurrentRoom(context, room) {
   context.commit('setCurrentRoom', room);
 }
