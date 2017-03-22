@@ -5,14 +5,13 @@
       <div :class="['room', { 'current-room': isCurrentRoom(room) }]" v-for="room in rooms" @click="showRoom(room)">
         <i class="fa fa-users" aria-hidden="true"></i>
         <span class="room-name">{{ room.name }}</span>
-        <i class="fa fa-times leave-room" @click="leaveRoom(room)"></i>
+        <i class="fa fa-times leave-room" @click.stop="leaveRoom(room)"></i>
       </div>
       <h3>Private Messages</h3>
     </div>
     <div class="resize-handle"
          @mousedown="startResize"
-         @mouseup="endResize"
-         >
+         @mouseup="endResize">
     </div>
   </div>
 </template>
@@ -58,7 +57,16 @@
       },
 
       leaveRoom(room) {
+        const roomIndex = this.rooms.indexOf(room);
         this.$store.dispatch('leaveRoom', room);
+
+        if (this.isCurrentRoom(room)) {
+          if (roomIndex < this.rooms.length) {
+            this.showRoom(this.rooms[roomIndex]);
+          } else {
+            this.showRoom(this.rooms[this.rooms.length - 1]);
+          }
+        }
       }
     }
   };
