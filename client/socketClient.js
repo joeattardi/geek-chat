@@ -1,3 +1,4 @@
+
 import io from 'socket.io-client';
 import Vue from 'vue';
 
@@ -13,10 +14,11 @@ export default {
       events.$emit('userList', userList);
     });
 
-    this.socket.on('newMessage', (user, text, timestamp) => {
+    this.socket.on('newMessage', (user, text, room, timestamp) => {
       events.$emit('newMessage', {
         user,
-        text, 
+        room,
+        text,
         timestamp
       });
     });
@@ -35,4 +37,3 @@ export default {
     events.$off('sendMessage');
   }
 };
-

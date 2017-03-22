@@ -4,15 +4,19 @@ import authService from '../authService';
 export function getRooms(context, token) {
   return Vue.http.get('/rooms', {
     headers: {
-      'authorization': token 
-    } 
+      'authorization': token
+    }
   }).then(response => {
-    context.commit('setRooms', response.body.rooms); 
+    context.commit('setRooms', response.body.rooms);
   });
 }
 
 export function setCurrentRoom(context, room) {
   context.commit('setCurrentRoom', room);
+}
+
+export function leaveRoom(context, room) {
+  context.commit('leaveRoom', room);
 }
 
 export function getUser(context, token) {

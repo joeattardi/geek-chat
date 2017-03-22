@@ -1,13 +1,15 @@
 <template>
   <header>
     <h1>
-      <i class="fa fa-lg fa-comment-o" aria-hidden="true"></i>
       GeekChat
     </h1>
+    <div id="controls">
+      <button>New Chat</button>
+    </div>
     <div id="user-info">
-      <i class="fa fa-user" aria-hidden="true"></i> 
+      <i class="fa fa-user" aria-hidden="true"></i>
       {{ user }}
-      <i @click="logout" title="Log out" class="fa fa-sign-out" aria-hidden="true"></i> 
+      <i @click="logout" title="Log out" class="fa fa-sign-out" aria-hidden="true"></i>
     </div>
   </header>
 </template>
@@ -58,11 +60,20 @@
     }
 
     h1 {
+      align-self: center;
       font-family: 'Montserrat', sans-serif;
       font-weight: bold;
       font-size: 1.2em;
       margin: 0;
+      margin-right: 0.5em;
+    }
+
+    #controls {
       flex-grow: 1;
+
+      button {
+        background-color: #1792D9;
+      }
     }
   }
 </style>

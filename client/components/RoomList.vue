@@ -3,7 +3,8 @@
     <h3>Rooms</h3>
     <div :class="['room', { 'current-room': isCurrentRoom(room) }]" v-for="room in rooms" @click="showRoom(room)">
       <i class="fa fa-users" aria-hidden="true"></i>
-      {{ room.name }}
+      <span class="room-name">{{ room.name }}</span>
+      <i class="fa fa-times leave-room" @click="leaveRoom(room)"></i>
     </div>
     <h3>Private Messages</h3>
   </div>
@@ -23,6 +24,10 @@
 
       showRoom(room) {
         this.$store.dispatch('setCurrentRoom', room);
+      },
+
+      leaveRoom(room) {
+        this.$store.dispatch('leaveRoom', room);
       }
     }
   };
@@ -48,10 +53,30 @@
       cursor: pointer;
       padding: 0.5em;
       border-radius: 5px;
+      display: flex;
+      align-items: center;
 
       &.current-room {
         background-color: $brand-color;
         color: #FFFFFF;
+      }
+
+      .fa-users {
+        margin-right: 0.25em;
+      }
+
+      .room-name {
+        flex-grow: 1;
+      }
+
+      .leave-room {
+        display: none;
+      }
+
+      &:hover {
+        .leave-room {
+          display: block;
+        }
       }
     }
   }

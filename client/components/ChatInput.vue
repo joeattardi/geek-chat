@@ -2,7 +2,7 @@
   <div id="chat-input">
     <form @submit="sendMessage">
       <input ref="inputField" autofocus v-model="message" type="text" />
-      <button>Send</button>
+      <button :disabled="message === ''">Send</button>
     </form>
   </div>
 </template>
@@ -20,8 +20,8 @@
       sendMessage(event) {
         event.preventDefault();
         events.$emit('sendMessage', {
-          message: this.message, 
-          room: this.$store.state.currentRoom
+          message: this.message,
+          room: this.$store.state.currentRoom._id
         });
         this.message = '';
       }

@@ -8,7 +8,7 @@ const authService = require('./authService');
 let connectedUsers = [];
 
 function getUserList() {
-  return connectedUsers.map(userRecord => _.pick(userRecord.user, ['username', 'fullName'])); 
+  return connectedUsers.map(userRecord => _.pick(userRecord.user, ['username', 'fullName']));
 }
 
 function getUserForSocket(socket) {
@@ -48,7 +48,7 @@ exports.init = function init(server) {
     });
 
     socket.on('chatMessage', (message) => {
-      io.emit('newMessage', getUserForSocket(socket), message.message, new Date());
+      io.emit('newMessage', getUserForSocket(socket), message.message, message.room, new Date());
     });
   });
 };

@@ -23,6 +23,10 @@ export default new Vuex.Store({
       state.currentRoom = room;
     },
 
+    leaveRoom(state, room) {
+      state.user.rooms = state.user.rooms.filter(r => r._id !== room._id);
+    },
+
     setRooms(state, rooms) {
       state.rooms = rooms;
     },

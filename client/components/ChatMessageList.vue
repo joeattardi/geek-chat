@@ -1,6 +1,6 @@
 <template>
   <div id="chat-messages">
-    <div class="message" v-for="message in messages">
+    <div class="message" v-for="message in roomMessages">
       <span class="message-user">
         {{ message.user.fullName }}
       </span>
@@ -31,6 +31,11 @@
       return {
         messages: []
       };
+    },
+    computed: {
+      roomMessages() {
+        return this.messages.filter(message => message.room === this.$store.state.currentRoom._id);
+      }
     }
   };
 </script>
