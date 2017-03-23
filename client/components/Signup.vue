@@ -42,7 +42,7 @@
 
   export default {
     components: {
-      spinner: Spinner
+      Spinner
     },
     mounted() {
       window.grecaptcha.render('recaptcha-container', {
@@ -103,7 +103,7 @@
             this.username = '';
             this.$refs.usernameField.focus();
           }
-          
+
           window.grecaptcha.reset();
         });
       }

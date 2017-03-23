@@ -1,12 +1,13 @@
 <template>
   <div id="content">
-    <chat-header />
+    <room-modal v-if="showRoomModal" @close="closeRoomModal()" />
+    <chat-header @newChat="openRoomModal()" />
     <div id="main">
       <room-list />
       <div id="chat-container">
         <div id="chat-room-header">
-          <div id="chat-room-name">{{ currentRoom.name }}</div>
-          <div id="chat-room-topic">{{ currentRoom.topic }}</div>
+          <div id="chat-room-name" v-if="currentRoom">{{ currentRoom.name }}</div>
+          <div id="chat-room-topic" v-if="currentRoom">{{ currentRoom.topic }}</div>
         </div>
         <div id="chat-content">
           <chat-message-list />
@@ -24,6 +25,7 @@
   import ChatMessageList from './ChatMessageList.vue';
   import RoomUserList from './RoomUserList.vue';
   import RoomList from './RoomList.vue';
+  import RoomModal from './RoomModal.vue';
   import socketClient from '../socketClient';
 
   export default {
@@ -44,17 +46,31 @@
         this.$router.push('/login');
       });
     },
+    data() {
+      return {
+        showRoomModal: false
+      };
+    },
     computed: {
       currentRoom() {
         return this.$store.state.currentRoom;
       }
     },
+    methods: {
+      openRoomModal() {
+        this.showRoomModal = true;
+      },
+      closeRoomModal() {
+        this.showRoomModal = false;
+      }
+    },
     components: {
-      'chat-header': ChatHeader,
-      'chat-input': ChatInput,
-      'chat-message-list': ChatMessageList,
-      'room-list': RoomList,
-      'room-user-list': RoomUserList
+      ChatHeader,
+      ChatInput,
+      ChatMessageList,
+      RoomList,
+      RoomUserList,
+      RoomModal
     }
   };
 </script>

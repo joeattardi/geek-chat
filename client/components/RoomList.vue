@@ -49,7 +49,7 @@
       },
 
       isCurrentRoom(room) {
-        return this.$store.state.currentRoom === room;
+        return this.$store.state.currentRoom._id === room._id;
       },
 
       showRoom(room) {

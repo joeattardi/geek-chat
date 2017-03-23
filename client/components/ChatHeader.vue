@@ -4,7 +4,7 @@
       GeekChat
     </h1>
     <div id="controls">
-      <button>New Chat</button>
+      <button @click="newChat()">New Chat</button>
     </div>
     <div id="user-info">
       <i class="fa fa-user" aria-hidden="true"></i>
@@ -25,6 +25,9 @@
         localStorage.removeItem('token');
         this.$store.dispatch('logout');
         this.$router.push('/');
+      },
+      newChat() {
+        this.$emit('newChat');
       }
     },
     computed: {

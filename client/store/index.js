@@ -11,7 +11,6 @@ export default new Vuex.Store({
     user: {
       fullName: ''
     },
-    rooms: [],
     currentRoom: '',
     roomListWidth: 200
   },
@@ -32,8 +31,16 @@ export default new Vuex.Store({
       state.user.rooms = state.user.rooms.filter(r => r._id !== room._id);
     },
 
+    joinRoom(state, room) {
+      state.user.rooms.push(room);
+    },
+
     setRooms(state, rooms) {
       state.rooms = rooms;
+    },
+
+    setToken(state, token) {
+      state.token = token;
     },
 
     clearUser(state) {

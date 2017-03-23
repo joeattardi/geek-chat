@@ -23,8 +23,13 @@ export function leaveRoom(context, room) {
   context.commit('leaveRoom', room);
 }
 
+export function joinRoom(context, room) {
+  context.commit('joinRoom', room);
+}
+
 export function getUser(context, token) {
   return authService.getUser(token).then(user => {
+    context.commit('setToken', token);
     context.commit('setUser', user);
     context.commit('setCurrentRoom', user.rooms[0]);
   });

@@ -51,7 +51,6 @@
       margin-right: 10px;
       height: 2em;
       align-self: center;
-      outline: none;
     }
   }
 </style>

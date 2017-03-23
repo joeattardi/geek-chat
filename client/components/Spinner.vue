@@ -1,10 +1,28 @@
 <template>
   <div class="spinner">
-    <div class="bounce1"></div>
-    <div class="bounce2"></div>
-    <div class="bounce3"></div>
+    <div :style="style" class="bounce1"></div>
+    <div :style="style" class="bounce2"></div>
+    <div :style="style" class="bounce3"></div>
   </div>
 </template>
+
+<script>
+  export default {
+    props: {
+      color: {
+        type: String,
+        default: '#FFFFFF'
+      }
+    },
+    computed: {
+      style() {
+        return {
+          backgroundColor: this.color
+        }
+      }
+    }
+  };
+</script>
 
 <style>
   .spinner {
@@ -38,10 +56,10 @@
   }
 
   @keyframes sk-bouncedelay {
-    0%, 80%, 100% { 
+    0%, 80%, 100% {
       -webkit-transform: scale(0);
       transform: scale(0);
-    } 40% { 
+    } 40% {
       -webkit-transform: scale(1.0);
       transform: scale(1.0);
     }

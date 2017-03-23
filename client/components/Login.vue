@@ -29,7 +29,7 @@
 
   export default {
     components: {
-      spinner: Spinner
+      Spinner
     },
     data() {
       return {
@@ -40,7 +40,7 @@
       };
     },
     mounted() {
-      this.$refs.usernameField.focus();      
+      this.$refs.usernameField.focus();
     },
     methods: {
       login(event) {
