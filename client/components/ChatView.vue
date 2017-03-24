@@ -4,7 +4,7 @@
     <chat-header @newChat="openRoomModal()" />
     <div id="main">
       <room-list />
-      <div id="chat-container">
+      <div id="chat-container" v-if="userRooms && userRooms.length > 0">
         <div id="chat-room-header">
           <div id="chat-room-name" v-if="currentRoom">{{ currentRoom.name }}</div>
           <div id="chat-room-topic" v-if="currentRoom">{{ currentRoom.topic }}</div>
@@ -38,13 +38,18 @@
     },
     created() {
       const token = localStorage.getItem('token');
-      socketClient.init();
-      socketClient.authenticate(token);
-
-      this.$store.dispatch('getUser', token).catch(error => {
-        localStorage.removeItem('token');
-        this.$router.push('/login');
-      });
+      this.$store.dispatch('getUser', token)
+        .then(user => {
+          socketClient.init();
+          socketClient.authenticate(token);
+          user.rooms.forEach(room => {
+            socketClient.joinRoom(room._id);
+          });
+        })
+        .catch(error => {
+          localStorage.removeItem('token');
+          this.$router.push('/login');
+        });
     },
     data() {
       return {
@@ -54,6 +59,9 @@
     computed: {
       currentRoom() {
         return this.$store.state.currentRoom;
+      },
+      userRooms() {
+        return this.$store.state.user.rooms;
       }
     },
     methods: {

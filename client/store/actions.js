@@ -32,6 +32,8 @@ export function getUser(context, token) {
     context.commit('setToken', token);
     context.commit('setUser', user);
     context.commit('setCurrentRoom', user.rooms[0]);
+
+    return user;
   });
 }
 

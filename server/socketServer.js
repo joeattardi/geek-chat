@@ -8,12 +8,12 @@ const authService = require('./authService');
 let connectedUsers = [];
 
 function getUserList() {
-  return connectedUsers.map(userRecord => _.pick(userRecord.user, ['username', 'fullName']));
+  return connectedUsers.map(userRecord => userRecord.user);
 }
 
 function getUserForSocket(socket) {
   const userRecord = _.find(connectedUsers, user => user.socket === socket);
-  return _.pick(userRecord.user, ['username', 'fullName']);
+  return userRecord.user;
 }
 
 exports.init = function init(server) {
@@ -31,8 +31,12 @@ exports.init = function init(server) {
           User.findById(decoded.sub).then(user => {
             if (user) {
               io.sockets.connected[socket.id] = socket;
-              connectedUsers.push({ user, socket });
-
+              const userRecord = {
+                user: _.pick(user, ['username', 'fullName']),
+                socket
+              };
+              userRecord.user.rooms = user.rooms.map(room => room.toHexString());
+              connectedUsers.push(userRecord);
               winston.info(`User ${user.fullName} authenticated, joining chat`);
               io.emit('userList', getUserList());
             }
@@ -48,7 +52,17 @@ exports.init = function init(server) {
     });
 
     socket.on('chatMessage', (message) => {
-      io.emit('newMessage', getUserForSocket(socket), message.message, message.room, new Date());
+      io.to(message.room).emit('newMessage', getUserForSocket(socket), message.message, message.room, new Date());
+    });
+
+    socket.on('joinRoom', roomId => {
+      const user = getUserForSocket(socket);
+
+      if (!user.rooms.includes(roomId)) {
+        user.rooms.push(roomId);
+      }
+      console.log('User rooms:', user.rooms);
+      socket.join(roomId);
     });
   });
 };

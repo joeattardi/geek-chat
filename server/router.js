@@ -10,5 +10,6 @@ router.post('/login', userController.login);
 router.post('/signup', userController.signup);
 
 router.get('/rooms', roomController.getRooms);
+router.post('/join/:roomId', roomController.joinRoom);
 
 module.exports = router;

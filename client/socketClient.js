@@ -32,6 +32,10 @@ export default {
     this.socket.emit('authenticate', jwt);
   },
 
+  joinRoom(roomId) {
+    this.socket.emit('joinRoom', roomId);
+  },
+
   disconnect() {
     this.socket.disconnect();
     events.$off('sendMessage');

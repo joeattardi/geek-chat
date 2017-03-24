@@ -22,6 +22,7 @@
 <script>
   import Modal from './Modal.vue';
   import Spinner from './Spinner.vue';
+  import socketClient from '../socketClient';
 
   export default {
     created() {
@@ -47,10 +48,18 @@
     methods: {
       joinRoom(room) {
         if (!this.$store.state.user.rooms.find(userRoom => userRoom._id === room._id)) {
-          this.$store.dispatch('joinRoom', room);
+          this.$http.post(`/join/${room._id}`, {}, {
+            headers: {
+              'authorization': this.$store.state.token
+            }
+          }).then(response => {
+            this.$store.dispatch('joinRoom', room);
+            socketClient.joinRoom(room._id);
+          })
         }
 
         this.$store.dispatch('setCurrentRoom', room);
+
         this.$emit('close');
       }
     },
