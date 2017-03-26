@@ -17,6 +17,8 @@
 </template>
 
 <script>
+  import socketClient from '../socketClient';
+
   export default {
     data() {
       return {
@@ -59,6 +61,14 @@
       leaveRoom(room) {
         const roomIndex = this.rooms.indexOf(room);
         this.$store.dispatch('leaveRoom', room);
+
+        this.$http.post(`/leave/${room._id}`, {}, {
+          headers: {
+            authorization: this.$store.state.token
+          }
+        }).then(response => {
+          socketClient.leaveRoom(room._id);
+        });
 
         if (this.isCurrentRoom(room)) {
           if (roomIndex < this.rooms.length) {

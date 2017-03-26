@@ -32,6 +32,10 @@ export default {
     this.socket.emit('authenticate', jwt);
   },
 
+  leaveRoom(roomId) {
+    this.socket.emit('leaveRoom', roomId);
+  },
+
   joinRoom(roomId) {
     this.socket.emit('joinRoom', roomId);
   },

@@ -13,7 +13,7 @@ function getUserList() {
 
 function getUserForSocket(socket) {
   const userRecord = _.find(connectedUsers, user => user.socket === socket);
-  return userRecord.user;
+  return userRecord ? userRecord.user : {};
 }
 
 exports.init = function init(server) {
@@ -57,12 +57,24 @@ exports.init = function init(server) {
 
     socket.on('joinRoom', roomId => {
       const user = getUserForSocket(socket);
+      if (user) {
+        if (!user.rooms.includes(roomId)) {
+          user.rooms.push(roomId);
+        }
+        socket.join(roomId);
 
-      if (!user.rooms.includes(roomId)) {
-        user.rooms.push(roomId);
+        io.emit('userList', getUserList());
       }
-      console.log('User rooms:', user.rooms);
-      socket.join(roomId);
+    });
+
+    socket.on('leaveRoom', roomId => {
+      const user = getUserForSocket(socket);
+      if (user) {
+        user.rooms = user.rooms.filter(room => room !== roomId);
+        socket.leave(roomId);
+
+        io.emit('userList', getUserList());
+      }
     });
   });
 };
