@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const authService = require('../authService');
 
 const userSchema = mongoose.Schema({
   username: {
@@ -27,6 +26,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre('save', function (next) { 
+  const authService = require('../authService');
   if (this.isModified('password')) {
     this.password = authService.hashPassword(this.password);
     next();

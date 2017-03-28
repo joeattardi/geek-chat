@@ -7,42 +7,34 @@ const constants = require('../constants');
 
 module.exports = {
   getUser: async function getUser(req, res) {
-    const token = req.get('authorization');
+    try {
+      const user = await authService.getUserFromToken(req.get('authorization'));
 
-    authService.validateToken(token, async function (err, decoded) {
-      if (err) {
+      if (user) {
+        res.status(200).json({
+          result: constants.API_RESULT_SUCCESS,
+          user: _.pick(user, ['_id', 'username', 'fullName', 'email', 'rooms'])
+        });
+      } else {
+        return res.status(401).json({
+          result: constants.API_RESULT_ERROR,
+          result: 'Invalid user'
+        });
+      }
+    } catch (error) {
+      if (error.code === constants.ERROR_INVALID_TOKEN) {
         return res.status(401).json({
           result: constants.API_RESULT_ERROR,
           message: 'Invalid token'
         });
-      }
-
-      try {
-        const user = await User.findById(decoded.sub)
-          .populate({
-            path: 'rooms',
-            model: 'Room'
-          });
-
-        if (user) {
-          res.status(200).json({
-            result: constants.API_RESULT_SUCCESS,
-            user: _.pick(user, ['_id', 'username', 'fullName', 'email', 'rooms'])
-          });
-        } else {
-          return res.status(401).json({
-            result: constants.API_RESULT_ERROR,
-            result: 'Invalid user'
-          });
-        }
-      } catch (error) {
+      } else {
         res.status(500).json({
           result: constants.API_RESULT_ERROR,
           code: constants.ERROR_GENERIC,
           message: `An unexpected error has occurred: ${error.message}`
         });
       }
-    });
+    }
   },
 
   login: async function login(req, res) {
