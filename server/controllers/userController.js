@@ -6,10 +6,10 @@ const authService = require('../authService');
 const constants = require('../constants');
 
 module.exports = {
-  getUser(req, res) {
+  getUser: async function getUser(req, res) {
     const token = req.get('authorization');
 
-    authService.validateToken(token, (err, decoded) => {
+    authService.validateToken(token, async function (err, decoded) {
       if (err) {
         return res.status(401).json({
           result: constants.API_RESULT_ERROR,
@@ -17,34 +17,43 @@ module.exports = {
         });
       }
 
-      User.findById(decoded.sub)
-        .populate({
-          path: 'rooms',
-          model: 'Room'
-        }).then(user => {
-          if (user) {
-            res.status(200).json({
-              result: constants.API_RESULT_SUCCESS,
-              user: _.pick(user, ['_id', 'username', 'fullName', 'email', 'rooms'])
-            });
-          } else {
-            return res.status(401).json({
-              result: constants.API_RESULT_ERROR,
-              result: 'Invalid user'
-            });
-          }
+      try {
+        const user = await User.findById(decoded.sub)
+          .populate({
+            path: 'rooms',
+            model: 'Room'
+          });
+
+        if (user) {
+          res.status(200).json({
+            result: constants.API_RESULT_SUCCESS,
+            user: _.pick(user, ['_id', 'username', 'fullName', 'email', 'rooms'])
+          });
+        } else {
+          return res.status(401).json({
+            result: constants.API_RESULT_ERROR,
+            result: 'Invalid user'
+          });
+        }
+      } catch (error) {
+        res.status(500).json({
+          result: constants.API_RESULT_ERROR,
+          code: constants.ERROR_GENERIC,
+          message: `An unexpected error has occurred: ${error.message}`
         });
+      }
     });
   },
-  
-  login(req, res) {
+
+  login: async function login(req, res) {
     if (!req.body.username || !req.body.password) {
       res.status(400).json({
         result: constants.API_RESULT_ERROR,
         message: 'Username and password are required'
       });
     } else {
-      User.findOne({ username: req.body.username }).then(foundUser => {
+      try {
+        const foundUser = await User.findOne({ username: req.body.username });
         if (!foundUser || !authService.validatePassword(req.body.password, foundUser.password)) {
           res.status(401).json({
             result: constants.API_RESULT_ERROR,
@@ -54,54 +63,46 @@ module.exports = {
           res.status(200).json({
             result: constants.API_RESULT_SUCCESS,
             token: authService.generateNewToken(foundUser._id)
-          }); 
+          });
         }
-      });
+      } catch (error) {
+        res.status(500).json({
+          result: constants.API_RESULT_ERROR,
+          code: constants.ERROR_GENERIC,
+          message: `An unexpected error has occurred: ${error.message}`
+        });
+      }
     }
   },
 
-  signup(req, res) {
-    request.post('https://www.google.com/recaptcha/api/siteverify', {
-      form: {
-        secret: process.env.RECAPTCHA_SECRET,
-        response: req.body.recaptchaResult
-      } 
-    }, (error, response, body) => {
-      if (!JSON.parse(body).success) {
+  signup: async function signup(req, res) {
+    const user = new User({
+      username: req.body.username,
+      password: req.body.password,
+      fullName: req.body.name,
+      email: req.body.email
+    });
+
+    try {
+      const savedUser = await user.save();
+      res.status(201).json({
+        result: constants.API_RESULT_SUCCESS,
+        token: authService.generateNewToken(savedUser._id)
+      });
+    } catch (error) {
+      if (error.code === constants.MONGO_ERROR_DUPLICATE_KEY) {
         res.status(400).json({
           result: constants.API_RESULT_ERROR,
-          code: constants.ERROR_INVALID_CAPTCHA
+          code: constants.ERROR_USERNAME_EXISTS,
+          message: 'That username is already taken.'
         });
       } else {
-        const user = new User({
-          username: req.body.username,
-          password: req.body.password,
-          fullName: req.body.name,
-          email: req.body.email
-        });
-
-        user.save().then(savedUser => {
-          res.status(201).json({
-            result: constants.API_RESULT_SUCCESS,
-            token: authService.generateNewToken(savedUser._id)
-          });
-        }).catch(error => {
-          if (error.code === constants.MONGO_ERROR_DUPLICATE_KEY) {
-            res.status(400).json({
-              result: constants.API_RESULT_ERROR,
-              code: constants.ERROR_USERNAME_EXISTS,
-              message: 'That username is already taken.'
-            }); 
-          } else {
-            console.log(error);
-            res.status(500).json({
-              result: constants.API_RESULT_ERROR,
-              code: constants.ERROR_GENERIC,
-              message: 'An unexpected error has occurred.'
-            });
-          }
+        res.status(500).json({
+          result: constants.API_RESULT_ERROR,
+          code: constants.ERROR_GENERIC,
+          message: `An unexpected error has occurred: ${error.message}`
         });
       }
-    });
+    }
   }
 };

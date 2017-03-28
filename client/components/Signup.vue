@@ -24,9 +24,6 @@
         <input ref="passwordConfirmField" type="password" id="passwordConfirm" v-model="passwordConfirm" placeholder="Confirm Password" />
       </div>
       <div>
-        <div ref="recaptcha" id="recaptcha-container"></div>
-      </div>
-      <div>
         <button v-if="!submitting" :disabled="!validate()">Complete Signup</button>
         <button v-else disabled>
           <spinner />
@@ -44,15 +41,6 @@
     components: {
       Spinner
     },
-    mounted() {
-      window.grecaptcha.render('recaptcha-container', {
-        sitekey: '6LeIVhQUAAAAAE9gxo9OzaY7P2PVPI3Z7NDfrgpo',
-        callback: 'recaptchaCallback'
-      });
-      window.recaptchaCallback = (result) => {
-        this.recaptchaResult = result;
-      };
-    },
     data() {
       return {
         username: '',
@@ -62,7 +50,6 @@
         name: '',
         signupError: '',
         submitting: false,
-        recaptchaResult: ''
       };
     },
     methods: {
@@ -71,7 +58,6 @@
           !validator.isEmpty(this.name) &&
           validator.isEmail(this.email) &&
           !validator.isEmpty(this.password) &&
-          this.recaptchaResult &&
           validator.equals(this.password, this.passwordConfirm);
       },
       signup(event) {
@@ -89,7 +75,6 @@
           passwordConfirm: this.passwordConfirm,
           email: this.email,
           name: this.name,
-          recaptchaResult: this.recaptchaResult
         }).then(response => {
           if (response.body.result === 'success') {
             localStorage.setItem('token', response.body.token);
@@ -103,8 +88,6 @@
             this.username = '';
             this.$refs.usernameField.focus();
           }
-
-          window.grecaptcha.reset();
         });
       }
     }
