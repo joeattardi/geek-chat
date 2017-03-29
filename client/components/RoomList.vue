@@ -37,11 +37,13 @@
       startResize() {
         this.resizing = true;
         document.addEventListener('mousemove', this.doResize);
+        document.addEventListener('mouseup', this.endResize);
       },
 
       endResize() {
         this.resizing = false;
         document.removeEventListener('mousemove', this.doResize);
+        document.removeEventListener('mouseup', this.endResize);
       },
 
       doResize(event) {
@@ -89,6 +91,7 @@
     background-color: $panel-color;
     border-right: 1px solid $panel-border-color;
     display: flex;
+    min-width: 200px;
 
     .resize-handle {
       width: 10px;
