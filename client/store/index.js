@@ -43,6 +43,10 @@ export default new Vuex.Store({
       state.token = token;
     },
 
+    renameRoom(state, newName) {
+      state.currentRoom.name = newName;
+    },
+
     clearUser(state) {
       state.user = {
         fullName: ''

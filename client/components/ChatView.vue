@@ -5,10 +5,7 @@
     <div id="main">
       <room-list />
       <div id="chat-container" v-if="userRooms && userRooms.length > 0">
-        <div id="chat-room-header">
-          <div id="chat-room-name" v-if="currentRoom">{{ currentRoom.name }}</div>
-          <div id="chat-room-topic" v-if="currentRoom">{{ currentRoom.topic }}</div>
-        </div>
+        <room-header />
         <div id="chat-content">
           <chat-message-list />
           <room-user-list />
@@ -23,6 +20,7 @@
   import ChatHeader from './ChatHeader.vue';
   import ChatInput from './ChatInput.vue';
   import ChatMessageList from './ChatMessageList.vue';
+  import RoomHeader from './RoomHeader.vue';
   import RoomUserList from './RoomUserList.vue';
   import RoomList from './RoomList.vue';
   import RoomModal from './RoomModal.vue';
@@ -57,9 +55,6 @@
       };
     },
     computed: {
-      currentRoom() {
-        return this.$store.state.currentRoom;
-      },
       userRooms() {
         return this.$store.state.user.rooms;
       }
@@ -78,6 +73,7 @@
       ChatMessageList,
       RoomList,
       RoomUserList,
+      RoomHeader,
       RoomModal
     }
   };
@@ -100,27 +96,6 @@
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-
-      #chat-room-header {
-        background: $panel-color;
-        border-bottom: 1px solid $panel-border-color;
-        padding: 0.5em;
-
-        #chat-room-name {
-          font-size: 1em;
-          font-weight: bold;
-        }
-
-        #chat-room-topic {
-          font-size: 0.75em;
-        }
-
-        h2 {
-          font-size: 1.2em;
-          font-weight: bold;
-          margin: 0;
-        }
-      }
 
       #chat-content {
         display: flex;

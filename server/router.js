@@ -10,6 +10,7 @@ router.post('/login', userController.login);
 router.post('/signup', userController.signup);
 
 router.get('/rooms', roomController.getRooms);
+router.put('/rooms/:roomId', roomController.updateRoom);
 router.post('/join/:roomId', roomController.joinRoom);
 router.post('/leave/:roomId', roomController.leaveRoom);
 

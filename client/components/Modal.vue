@@ -11,6 +11,9 @@
         <div class="modal-body">
           <slot name="body"></slot>
         </div>
+        <div class="modal-footer">
+          <slot name="footer"></slot>
+        </div>
       </div>
     </div>
   </div>
@@ -75,6 +78,12 @@
 
       .modal-body {
         padding: 20px;
+      }
+
+      .modal-footer {
+        padding: 20px;
+        padding-top: 0;
+        text-align: center;
       }
     }
   }

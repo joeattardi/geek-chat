@@ -1,9 +1,12 @@
+const winston = require('winston');
+
 const Room = require('../models/Room');
 const User = require('../models/User');
 const authService = require('../authService');
 const constants = require('../constants');
 
-function handleError(error) {
+function handleError(error, res) {
+  winston.error(error);
   if (error.code === constants.ERROR_INVALID_TOKEN) {
     res.status(401).json({
       result: constants.API_RESULT_ERROR,
@@ -19,6 +22,32 @@ function handleError(error) {
 }
 
 module.exports = {
+  updateRoom: async function updateRoom(req, res) {
+    try {
+      const room = await Room.findById(req.params.roomId);
+
+      if (!room) {
+        return res.status(404).json({
+          result: constants.API_RESULT_ERROR,
+          message: 'Invalid room ID'
+        });
+      }
+
+      room.name = req.body.name;
+      room.topic = req.body.topic;
+
+      await room.save();
+
+      res.status(200).json({
+        result: constants.API_RESULT_SUCCESS,
+        message: 'Room updated'
+      });
+
+    } catch (error) {
+      handleError(error, res);
+    }
+  },
+
   getRooms: async function getRooms(req, res) {
     try {
       const rooms = await Room.find({}, '_id name topic');
@@ -67,7 +96,7 @@ module.exports = {
         });
       }
     } catch (error) {
-      handleError(error);
+      handleError(error, res);
     }
   },
 
@@ -96,7 +125,7 @@ module.exports = {
         });
       }
     } catch (error) {
-      handleError(error);
+      handleError(error, res);
     }
   }
 };

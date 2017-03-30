@@ -27,6 +27,20 @@ export function joinRoom(context, room) {
   context.commit('joinRoom', room);
 }
 
+export function renameRoom(context, newName) {
+  return Vue.http.put(`/rooms/${context.state.currentRoom._id}`, {
+    _id: context.state.currentRoom._id,
+    name: newName,
+    topic: context.state.currentRoom.topic
+  }, {
+    headers: {
+      'authorization': context.state.token
+    }
+  }).then(response => {
+    context.commit('renameRoom', newName);
+  });
+}
+
 export function getUser(context, token) {
   return authService.getUser(token).then(user => {
     context.commit('setToken', token);
