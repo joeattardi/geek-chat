@@ -10,11 +10,12 @@
 </template>
 
 <script>
-  import { events } from '../socketClient';
+  import { eventChannel } from '../socketClient';
+  import { USER_LIST } from '../events';
 
   export default {
     created() {
-      events.$on('userList', userList => {
+      eventChannel.$on(USER_LIST, userList => {
         this.userList = userList;
       });
     },

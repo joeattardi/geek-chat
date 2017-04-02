@@ -8,7 +8,8 @@
 </template>
 
 <script>
-  import socketClient, { events } from '../socketClient';
+  import socketClient, { eventChannel } from '../socketClient';
+  import * as events from '../events';
 
   export default {
     data() {
@@ -19,7 +20,7 @@
     methods: {
       sendMessage(event) {
         event.preventDefault();
-        events.$emit('sendMessage', {
+        eventChannel.$emit(events.SEND_MESSAGE, {
           message: this.message,
           room: this.$store.state.currentRoom._id
         });

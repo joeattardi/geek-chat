@@ -14,11 +14,12 @@
 
 <script>
   import moment from 'moment';
-  import socketClient, { events } from '../socketClient';
+  import socketClient, { eventChannel } from '../socketClient';
+  import { NEW_MESSAGE_FROM_SERVER } from '../events';
 
   export default {
     created() {
-      events.$on('newMessage', message => {
+      eventChannel.$on(NEW_MESSAGE_FROM_SERVER, message => {
         this.messages.push(message);
       });
     },
