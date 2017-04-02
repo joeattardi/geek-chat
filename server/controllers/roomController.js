@@ -4,6 +4,7 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const authService = require('../authService');
 const constants = require('../constants');
+const socketServer = require('../socketServer');
 
 function handleError(error, res) {
   winston.error(error);
@@ -24,6 +25,15 @@ function handleError(error, res) {
 module.exports = {
   updateRoom: async function updateRoom(req, res) {
     try {
+      const user = await authService.getUserFromToken(req.get('authorization'));
+
+      if (!user) {
+        return res.status(401).json({
+          result: constants.API_RESULT_ERROR,
+          message: 'Invalid user'
+        });
+      }
+
       const room = await Room.findById(req.params.roomId);
 
       if (!room) {
@@ -31,6 +41,13 @@ module.exports = {
           result: constants.API_RESULT_ERROR,
           message: 'Invalid room ID'
         });
+      }
+
+      let changed;
+      if (room.name !== req.body.name) {
+        changed = 'room';
+      } else if (room.topic !== req.body.topic) {
+        changed = 'topic';
       }
 
       room.name = req.body.name;
@@ -42,6 +59,12 @@ module.exports = {
         result: constants.API_RESULT_SUCCESS,
         message: 'Room updated'
       });
+
+      if (changed === 'name') {
+        socketServer.sendSystemMessage(`${user.fullName} renamed the room to "${room.name}"`, room._id);
+      } else if (changed === 'topic') {
+        socketServer.sendSystemMessage(`${user.fullName} changed the topic to "${room.topic}"`, room._id);
+      }
 
     } catch (error) {
       handleError(error, res);

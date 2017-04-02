@@ -1,32 +1,28 @@
 <template>
   <div id="chat-messages">
-    <div class="message" v-for="message in roomMessages">
-      <span class="message-user">
-        {{ message.user.fullName }}
-      </span>
-      <span class="message-timestamp">
-        {{ formatTimestamp(message.timestamp) }}
-      </span>
-      <div class="message-text">{{ message.text }}</div>
+    <div v-for="message in roomMessages">
+      <chat-message :message="message" v-if="message.type === 'chatMessage'"></chat-message>
+      <system-message :message="message" v-else-if="message.type === 'systemMessage'"></system-message>
     </div>
   </div>
 </template>
 
 <script>
-  import moment from 'moment';
+  import ChatMessage from './ChatMessage.vue';
+  import SystemMessage from './SystemMessage.vue';
   import socketClient, { eventChannel } from '../socketClient';
   import { NEW_MESSAGE_FROM_SERVER } from '../events';
 
   export default {
+    components: {
+      ChatMessage,
+      SystemMessage
+    },
     created() {
       eventChannel.$on(NEW_MESSAGE_FROM_SERVER, message => {
+        console.log(message);
         this.messages.push(message);
       });
-    },
-    methods: {
-      formatTimestamp(timestamp) {
-        return moment(timestamp).format('MMM D h:mm');
-      }
     },
     data() {
       return {
@@ -49,23 +45,5 @@
     border-right: 1px solid $panel-border-color;
     overflow-y: scroll;
     padding: 1em;
-
-    .message {
-      .message-user {
-        vertical-align: middle;
-        font-weight: bold;
-        color: $brand-color;
-      }
-
-      .message-timestamp {
-        vertical-align: middle;
-        color: #AAAAAA;
-        font-size: 0.8em;
-      }
-
-      .message-text {
-        font-size: 0.9em;
-      }
-    }
   }
 </style>

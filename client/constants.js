@@ -1,1 +1,4 @@
-export const CHAT_MESSAGE = 'chatMessage';
+export const MESSAGE_TYPE = {
+  CHAT_MESSAGE: 'chatMessage',
+  SYSTEM_MESSAGE: 'systemMessage'
+};

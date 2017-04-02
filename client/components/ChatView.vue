@@ -41,7 +41,7 @@
           socketClient.init();
           socketClient.authenticate(token);
           user.rooms.forEach(room => {
-            socketClient.joinRoom(room._id);
+            socketClient.joinRoom(room._id, true);
           });
         })
         .catch(error => {

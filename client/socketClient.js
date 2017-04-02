@@ -4,12 +4,13 @@ import Vue from 'vue';
 
 import * as chatConstants from '../shared/chatConstants';
 import * as events from './events';
+import { MESSAGE_TYPE } from './constants';
 
 export const eventChannel = new Vue();
 
 export default {
   init() {
-    this.socket = io();
+    this.socket = io('/', { reconnection: false });
 
     this.socket.on(chatConstants.USER_LIST, userList => {
       eventChannel.$emit(events.USER_LIST, userList);
@@ -17,9 +18,19 @@ export default {
 
     this.socket.on(chatConstants.CHAT_MESSAGE_TO_CLIENT, (user, text, room, timestamp) => {
       eventChannel.$emit(events.NEW_MESSAGE_FROM_SERVER, {
+        type: MESSAGE_TYPE.CHAT_MESSAGE,
         user,
         room,
         text,
+        timestamp
+      });
+    });
+
+    this.socket.on(chatConstants.SYSTEM_MESSAGE, (text, room, timestamp) => {
+      eventChannel.$emit(events.NEW_MESSAGE_FROM_SERVER, {
+        type: MESSAGE_TYPE.SYSTEM_MESSAGE,
+        text,
+        room,
         timestamp
       });
     });
@@ -37,8 +48,8 @@ export default {
     this.socket.emit(chatConstants.LEAVE_ROOM, roomId);
   },
 
-  joinRoom(roomId) {
-    this.socket.emit(chatConstants.JOIN_ROOM, roomId);
+  joinRoom(roomId, silent) {
+    this.socket.emit(chatConstants.JOIN_ROOM, roomId, silent);
   },
 
   disconnect() {
