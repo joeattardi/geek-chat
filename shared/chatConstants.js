@@ -9,5 +9,7 @@ module.exports = {
   SYSTEM_MESSAGE: 'systemMessage',
 
   JOIN_ROOM: 'joinRoom',
-  LEAVE_ROOM: 'leaveRoom'
+  LEAVE_ROOM: 'leaveRoom',
+
+  UPDATE_ROOM: 'updateRoom'
 };

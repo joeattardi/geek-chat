@@ -22,6 +22,10 @@ exports.sendSystemMessage = function sendSystemMessage(message, roomId) {
   io.emit(chatConstants.SYSTEM_MESSAGE, message, roomId, new Date());
 }
 
+exports.updateRoom = function updateRoom(room) {
+  io.emit(chatConstants.UPDATE_ROOM, room);
+}
+
 exports.init = function init(server) {
   io = new Server(server);
   io.on(chatConstants.CONNECTION, socket => {

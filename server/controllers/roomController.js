@@ -45,7 +45,7 @@ module.exports = {
 
       let changed;
       if (room.name !== req.body.name) {
-        changed = 'room';
+        changed = 'name';
       } else if (room.topic !== req.body.topic) {
         changed = 'topic';
       }
@@ -65,6 +65,8 @@ module.exports = {
       } else if (changed === 'topic') {
         socketServer.sendSystemMessage(`${user.fullName} changed the topic to "${room.topic}"`, room._id);
       }
+
+      socketServer.updateRoom(room);
 
     } catch (error) {
       handleError(error, res);

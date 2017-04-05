@@ -47,6 +47,12 @@ export default new Vuex.Store({
       state.currentRoom.name = newName;
     },
 
+    updateRoom(state, room) {
+      const roomToUpdate = state.user.rooms.find(r => r._id === room._id);
+      roomToUpdate.name = room.name;
+      roomToUpdate.topic = room.topic;
+    },
+
     clearUser(state) {
       state.user = {
         fullName: ''

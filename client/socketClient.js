@@ -2,6 +2,7 @@
 import io from 'socket.io-client';
 import Vue from 'vue';
 
+import store from './store';
 import * as chatConstants from '../shared/chatConstants';
 import * as events from './events';
 import { MESSAGE_TYPE } from './constants';
@@ -14,6 +15,10 @@ export default {
 
     this.socket.on(chatConstants.USER_LIST, userList => {
       eventChannel.$emit(events.USER_LIST, userList);
+    });
+
+    this.socket.on(chatConstants.UPDATE_ROOM, room => {
+      store.commit('updateRoom', room);
     });
 
     this.socket.on(chatConstants.CHAT_MESSAGE_TO_CLIENT, (user, text, room, timestamp) => {
