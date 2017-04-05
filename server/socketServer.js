@@ -78,7 +78,7 @@ exports.init = function init(server) {
 
     socket.on(chatConstants.JOIN_ROOM, (roomId, silent) => {
       const user = getUserForSocket(socket);
-      if (user) {
+      if (user && user.rooms) {
         if (!user.rooms.includes(roomId)) {
           winston.debug(`${user.fullName} joined room ${roomId}`);
           user.rooms.push(roomId);
