@@ -20,7 +20,9 @@
     },
     created() {
       eventChannel.$on(NEW_MESSAGE_FROM_SERVER, message => {
-        console.log(message);
+        if (window.GeekChat.debug) {
+          console.debug(message);
+        }
         this.messages.push(message);
       });
     },

@@ -12,6 +12,10 @@ import store from './store';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
+window.GeekChat = {
+  debug: false
+};
+
 const routes = [
   {
     path: '/',
@@ -37,4 +41,3 @@ new Vue({
   store,
   render: h => h(App)
 });
-
