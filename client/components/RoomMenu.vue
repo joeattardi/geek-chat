@@ -1,42 +1,21 @@
 <template>
   <div>
-    <div v-if="showMenu" id="room-menu" @click.stop>
+    <div id="room-menu" @click.stop>
       <div class="menu-item">Change topic</div>
       <div class="menu-item" @click="openRenameModal()">Rename room</div>
       <hr />
       <div class="menu-item delete">Delete room</div>
     </div>
-    <rename-modal v-if="showRenameModal" @close="closeRenameModal()"/>
+
   </div>
 </template>
 
 <script>
-  import RenameModal from './RenameModal.vue';
-
   export default {
-    components: {
-      RenameModal
-    },
     methods: {
       openRenameModal() {
-        this.roomName = this.$store.state.currentRoom.name
-        this.showRenameModal = true;
-        this.showMenu = false;
-
-        setTimeout(() => {
-          document.getElementById('rename-room-name').focus();
-        }, 0);
-      },
-      closeRenameModal() {
-        this.showRenameModal = false;
+        this.$emit('showRenameModal');
       }
-    },
-    data() {
-      return {
-        showMenu: true,
-        showRenameModal: false,
-        roomName: ''
-      };
     }
   };
 </script>

@@ -11,19 +11,29 @@
       <span id="chat-room-menu-trigger" @click="toggleRoomMenu">
         <i class="fa fa-lg fa-ellipsis-h" aria-hidden="true"></i>
       </span>
-      <room-menu v-if="showRoomMenu" />
+      <room-menu @showRenameModal="openRenameModal()" v-if="showRoomMenu" />
+      <rename-modal v-if="showRenameModal" @close="closeRenameModal()"/>
     </div>
   </div>
 </template>
 
 <script>
   import RoomMenu from './RoomMenu.vue';
+  import RenameModal from './RenameModal.vue';
 
   export default {
     components: {
-      RoomMenu
+      RoomMenu,
+      RenameModal
     },
     methods: {
+      openRenameModal() {
+        this.showRenameModal = true;
+        this.hideRoomMenu();
+      },
+      closeRenameModal() {
+        this.showRenameModal = false;
+      },
       hideRoomMenu() {
         this.showRoomMenu = false;
         document.removeEventListener('click', this.hideRoomMenu);
@@ -42,7 +52,8 @@
     },
     data() {
       return {
-        showRoomMenu: false
+        showRoomMenu: false,
+        showRenameModal: false
       };
     },
     computed: {

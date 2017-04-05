@@ -19,6 +19,7 @@
   export default {
     created() {
       this.roomName = this.$store.state.currentRoom.name;
+      setTimeout(() => document.getElementById('rename-room-name').focus(), 0);
     },
     methods: {
       save() {
