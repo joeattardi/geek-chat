@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-mask">
+  <div @click.stop class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal">
         <div class="modal-header">
