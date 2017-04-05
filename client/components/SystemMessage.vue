@@ -17,8 +17,7 @@
 
 <style lang="sass">
   .system-message {
-    font-weight: bold;
     color: #999999;
-    font-size: 0.9em;
+    font-size: 0.8em;
   }
 </style>

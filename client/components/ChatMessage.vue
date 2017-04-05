@@ -36,6 +36,7 @@
       vertical-align: middle;
       font-weight: bold;
       color: $brand-color;
+      font-size: 0.8em;
     }
 
     .message-timestamp {
@@ -45,7 +46,7 @@
     }
 
     .message-text {
-      font-size: 0.9em;
+      font-size: 0.8em;
     }
   }
 </style>
