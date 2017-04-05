@@ -11,8 +11,11 @@
       <span id="chat-room-menu-trigger" @click="toggleRoomMenu">
         <i class="fa fa-lg fa-ellipsis-h" aria-hidden="true"></i>
       </span>
-      <room-menu @showRenameModal="openRenameModal()" v-if="showRoomMenu" />
-      <rename-modal v-if="showRenameModal" @close="closeRenameModal()"/>
+      <room-menu @showRenameModal="openRenameModal()"
+                 @showChangeTopicModal="openChangeTopicModal()"
+                 v-if="showRoomMenu" />
+      <rename-modal v-if="showRenameModal" @close="closeRenameModal()" />
+      <change-topic-modal v-if="showChangeTopicModal" @close="closeChangeTopicModal()" />
     </div>
   </div>
 </template>
@@ -20,13 +23,22 @@
 <script>
   import RoomMenu from './RoomMenu.vue';
   import RenameModal from './RenameModal.vue';
+  import ChangeTopicModal from './ChangeTopicModal.vue';
 
   export default {
     components: {
       RoomMenu,
-      RenameModal
+      RenameModal,
+      ChangeTopicModal
     },
     methods: {
+      openChangeTopicModal() {
+        this.showChangeTopicModal = true;
+        this.hideRoomMenu();
+      },
+      closeChangeTopicModal() {
+        this.showChangeTopicModal = false;
+      },
       openRenameModal() {
         this.showRenameModal = true;
         this.hideRoomMenu();
@@ -53,7 +65,8 @@
     data() {
       return {
         showRoomMenu: false,
-        showRenameModal: false
+        showRenameModal: false,
+        showChangeTopicModal: false
       };
     },
     computed: {

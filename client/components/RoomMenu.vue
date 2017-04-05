@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="room-menu" @click.stop>
-      <div class="menu-item">Change topic</div>
+      <div class="menu-item" @click="openChangeTopicModal()">Change topic</div>
       <div class="menu-item" @click="openRenameModal()">Rename room</div>
       <hr />
       <div class="menu-item delete">Delete room</div>
@@ -15,6 +15,9 @@
     methods: {
       openRenameModal() {
         this.$emit('showRenameModal');
+      },
+      openChangeTopicModal() {
+        this.$emit('showChangeTopicModal');
       }
     }
   };

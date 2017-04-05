@@ -43,6 +43,10 @@ export default new Vuex.Store({
       state.token = token;
     },
 
+    changeTopic(state, newTopic) {
+      state.currentRoom.topic = newTopic;
+    },
+
     renameRoom(state, newName) {
       state.currentRoom.name = newName;
     },
