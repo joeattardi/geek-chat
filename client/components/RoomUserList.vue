@@ -1,7 +1,7 @@
 <template>
   <div id="chat-users">
     <ul>
-      <li v-for="user in roomUserList">
+      <li v-for="user in roomUserList" :class="{ admin: isAdmin(user) }">
         <i class="fa fa-user" aria-hidden="true"></i>
         {{ user.fullName }}
       </li>
@@ -24,6 +24,12 @@
         userList: []
       };
     },
+    methods: {
+      isAdmin(user) {
+        const admins = this.$store.state.currentRoom.admins;
+        return admins.indexOf(user._id) >= 0;
+      }
+    },
     computed: {
       roomUserList() {
         return this.userList.filter(user => user.rooms.indexOf(this.$store.state.currentRoom._id) >= 0);
@@ -44,6 +50,10 @@
       li {
         font-size: 0.8em;
         list-style-type: none;
+
+        &.admin {
+          font-weight: bold;
+        }
       }
     }
   }

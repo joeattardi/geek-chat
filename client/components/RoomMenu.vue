@@ -2,9 +2,9 @@
   <div>
     <div id="room-menu" @click.stop>
       <div class="menu-item" @click="openChangeTopicModal()">Change topic</div>
-      <div class="menu-item" @click="openRenameModal()">Rename room</div>
-      <hr />
-      <div class="menu-item delete">Delete room</div>
+      <div class="menu-item" v-if="isAdmin" @click="openRenameModal()">Rename room</div>
+      <hr v-if="isAdmin" />
+      <div class="menu-item delete" v-if="isAdmin">Delete room</div>
     </div>
 
   </div>
@@ -18,6 +18,11 @@
       },
       openChangeTopicModal() {
         this.$emit('showChangeTopicModal');
+      }
+    },
+    computed: {
+      isAdmin() {
+        return this.$store.state.currentRoom.admins.indexOf(this.$store.state.user._id) >= 0;
       }
     }
   };

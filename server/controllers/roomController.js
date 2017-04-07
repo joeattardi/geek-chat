@@ -75,7 +75,7 @@ module.exports = {
 
   getRooms: async function getRooms(req, res) {
     try {
-      const rooms = await Room.find({}, '_id name topic');
+      const rooms = await Room.find({}, '_id name topic admins');
       res.status(200).json({
         result: constants.API_RESULT_SUCCESS,
         rooms
