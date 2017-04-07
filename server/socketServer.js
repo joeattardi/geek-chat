@@ -13,8 +13,12 @@ function getUserList() {
   return connectedUsers.map(userRecord => userRecord.user);
 }
 
+function getUserRecordForSocket(socket) {
+  return _.find(connectedUsers, user => user.sockets.indexOf(socket) >= 0);
+}
+
 function getUserForSocket(socket) {
-  const userRecord = _.find(connectedUsers, user => user.socket === socket);
+  const userRecord = getUserRecordForSocket(socket);
   return userRecord ? userRecord.user : {};
 }
 
@@ -41,17 +45,25 @@ exports.init = function init(server) {
           User.findById(decoded.sub).then(user => {
             if (user) {
               io.sockets.connected[socket.id] = socket;
-              const userRecord = {
-                user: _.pick(user, ['username', 'fullName']),
-                socket
-              };
-              userRecord.user.rooms = user.rooms.map(room => room.toHexString());
 
-              user.rooms.forEach(room => {
-                io.to(room).emit(chatConstants.SYSTEM_MESSAGE, `${user.fullName} connected`, room, new Date());
-              });
+              let userRecord = _.find(connectedUsers, userRecord => userRecord.user._id.equals(user._id));
+              if (!userRecord) {
+                const userRecord = {
+                  user: _.pick(user, ['_id', 'username', 'fullName']),
+                  sockets: [socket]
+                };
+                userRecord.user.rooms = user.rooms.map(room => room.toHexString());
 
-              connectedUsers.push(userRecord);
+                user.rooms.forEach(room => {
+                  io.to(room).emit(chatConstants.SYSTEM_MESSAGE, `${user.fullName} connected`, room, new Date());
+                });
+
+                connectedUsers.push(userRecord);
+              } else {
+                userRecord.sockets.push(socket);
+                winston.info(`Duplicate connection from ${user.username}`);
+              }
+
               winston.info(`User ${user.fullName} authenticated, joining chat`);
               io.emit(chatConstants.USER_LIST, getUserList());
             }
@@ -61,14 +73,22 @@ exports.init = function init(server) {
     });
 
     socket.on(chatConstants.DISCONNECT, () => {
-      winston.info('socket.io disconnected');
-      const user = getUserForSocket(socket);
-      if (user) {
-        user.rooms.forEach(room => {
-          io.to(room).emit(chatConstants.SYSTEM_MESSAGE, `${user.fullName} disconnected`, room, new Date());
-        });
+      const userRecord = getUserRecordForSocket(socket);
+
+      if (userRecord) {
+        winston.info(`User ${userRecord.user.fullName} disconnected`);
+
+        userRecord.sockets = userRecord.sockets.filter(s => s !== socket);
+
+        if (userRecord.sockets.length === 0) {
+          userRecord.user.rooms.forEach(room => {
+            io.to(room).emit(chatConstants.SYSTEM_MESSAGE, `${userRecord.user.fullName} disconnected`, room, new Date());
+          });
+
+          connectedUsers = connectedUsers.filter(r => r !== userRecord);
+        }
       }
-      connectedUsers = connectedUsers.filter(userRecord => userRecord.socket !== socket);
+
       io.emit(chatConstants.USER_LIST, getUserList());
     });
 
