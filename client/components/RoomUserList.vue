@@ -43,13 +43,13 @@
     width: 10em;
 
     ul {
-
       padding: 0.5em;
       margin: 0;
 
       li {
         font-size: 0.8em;
         list-style-type: none;
+        cursor: pointer;
 
         &.admin {
           font-weight: bold;

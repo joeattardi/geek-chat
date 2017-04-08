@@ -19,7 +19,7 @@ a {
 
 input {
   outline: none;
-  
+
   &:disabled {
     background-color: #DDDDDD;
     opacity: 0.5;
@@ -28,11 +28,11 @@ input {
 
 button {
   background-color: $brand-color;
-  border-radius: 5px;
+  border-radius: 3px;
   border: none;
-  font-size: 14px;
+  font-size: 0.8em;
   color: #FFFFFF;
-  padding: 0.5em 1em;
+  padding: 0.25em 1em;
   cursor: pointer;
   transition: background-color 0.25s;
   outline: none;

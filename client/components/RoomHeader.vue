@@ -86,6 +86,7 @@
     padding: 0.5em;
     display: flex;
     align-items: center;
+    box-shadow: 1px 1px 1px #999999;
 
     #chat-room-icon {
       margin-right: 0.5em;
