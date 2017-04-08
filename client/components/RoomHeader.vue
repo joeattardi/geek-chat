@@ -14,8 +14,12 @@
       <room-menu @showRenameModal="openRenameModal()"
                  @showChangeTopicModal="openChangeTopicModal()"
                  v-if="showRoomMenu" />
-      <rename-modal v-if="showRenameModal" @close="closeRenameModal()" />
-      <change-topic-modal v-if="showChangeTopicModal" @close="closeChangeTopicModal()" />
+      <transition name="fade">
+        <rename-modal v-if="showRenameModal" @close="closeRenameModal()" />
+      </transition>
+      <transition name="fade">
+        <change-topic-modal v-if="showChangeTopicModal" @close="closeChangeTopicModal()" />
+      </transition>
     </div>
   </div>
 </template>
@@ -115,6 +119,18 @@
         &:hover {
           color: #000000;
         }
+      }
+
+      .fade-enter, .fade-leave-to {
+        opacity: 0;
+      }
+
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity 0.25s;
+      }
+
+      .fade-enter-to, .fade-leave {
+        opacity: 1;
       }
     }
   }

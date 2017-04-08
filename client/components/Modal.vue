@@ -54,6 +54,7 @@
   .modal-wrapper {
     display: table-cell;
     vertical-align: middle;
+    animation: open 0.25s;
 
     .modal {
       background-color: $panel-color;
@@ -86,5 +87,19 @@
         text-align: center;
       }
     }
+  }
+
+  @keyframes open {
+    0% { transform: scale(0.1); }
+    50% { transform: scale(1.2); }
+    75% { transform: scale(0.9); }
+    100% { transform: scale(1.0); }
+  }
+
+  @keyframes close {
+    0% { transform: scale(1.0); }
+    25% { transform: scale(0.9); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(0.1); }
   }
 </style>
