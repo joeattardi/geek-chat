@@ -4,7 +4,9 @@
       <div class="menu-item" @click="openChangeTopicModal()">Change topic</div>
       <div class="menu-item" v-if="isAdmin" @click="openRenameModal()">Rename room</div>
       <hr v-if="isAdmin" />
-      <div class="menu-item delete" v-if="isAdmin">Delete room</div>
+      <div class="menu-item delete" v-if="isAdmin" @click="openConfirmDeleteModal()">
+        Delete room
+      </div>
     </div>
 
   </div>
@@ -18,6 +20,9 @@
       },
       openChangeTopicModal() {
         this.$emit('showChangeTopicModal');
+      },
+      openConfirmDeleteModal() {
+        this.$emit('showConfirmDeleteModal');
       }
     },
     computed: {

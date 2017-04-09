@@ -13,12 +13,16 @@
       </span>
       <room-menu @showRenameModal="openRenameModal()"
                  @showChangeTopicModal="openChangeTopicModal()"
+                 @showConfirmDeleteModal="openConfirmDeleteModal()"
                  v-if="showRoomMenu" />
       <transition name="fade">
         <rename-modal v-if="showRenameModal" @close="closeRenameModal()" />
       </transition>
       <transition name="fade">
         <change-topic-modal v-if="showChangeTopicModal" @close="closeChangeTopicModal()" />
+      </transition>
+      <transition name="fade">
+        <confirm-delete-modal v-if="showConfirmDeleteModal" @close="closeConfirmDeleteModal()" />
       </transition>
     </div>
   </div>
@@ -28,12 +32,14 @@
   import RoomMenu from './RoomMenu.vue';
   import RenameModal from './RenameModal.vue';
   import ChangeTopicModal from './ChangeTopicModal.vue';
+  import ConfirmDeleteModal from './ConfirmDeleteModal.vue';
 
   export default {
     components: {
       RoomMenu,
       RenameModal,
-      ChangeTopicModal
+      ChangeTopicModal,
+      ConfirmDeleteModal
     },
     methods: {
       openChangeTopicModal() {
@@ -49,6 +55,13 @@
       },
       closeRenameModal() {
         this.showRenameModal = false;
+      },
+      openConfirmDeleteModal() {
+        this.showConfirmDeleteModal = true;
+        this.hideRoomMenu();
+      },
+      closeConfirmDeleteModal() {
+        this.showConfirmDeleteModal = false;
       },
       hideRoomMenu() {
         this.showRoomMenu = false;
@@ -70,7 +83,8 @@
       return {
         showRoomMenu: false,
         showRenameModal: false,
-        showChangeTopicModal: false
+        showChangeTopicModal: false,
+        showConfirmDeleteModal: false
       };
     },
     computed: {

@@ -61,11 +61,14 @@
       margin: 0 auto;
       width: 300px;
 
+      color: #000000;
+
       .modal-header {
         padding: 0.5em;
         background: $brand-color;
         color: #FFFFFF;
         display: flex;
+        box-shadow: 1px 1px 1px #000000;
 
         .modal-title {
           flex-grow: 1;

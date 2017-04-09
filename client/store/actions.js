@@ -55,6 +55,27 @@ export function renameRoom(context, newName) {
   });
 }
 
+export function createRoom(context, room) {
+  return Vue.http.post('/rooms', {
+    name: room.name,
+    topic: room.topic
+  }, {
+    headers: {
+      'authorization': context.state.token
+    }
+  });
+}
+
+export function deleteRoom(context) {
+  const roomId = context.state.currentRoom._id;
+  context.commit('leaveRoom', context.state.currentRoom);
+  return Vue.http.delete(`/rooms/${roomId}`, {
+    headers: {
+      'authorization': context.state.token
+    }
+  });
+}
+
 export function getUser(context, token) {
   return authService.getUser(token).then(user => {
     context.commit('setToken', token);

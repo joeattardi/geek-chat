@@ -26,6 +26,10 @@ input {
   }
 }
 
+.error-message {
+  color: $error-color;
+}
+
 button {
   background-color: $brand-color;
   border-radius: 3px;
@@ -35,7 +39,6 @@ button {
   padding: 0.25em 1em;
   cursor: pointer;
   transition: background-color 0.25s;
-  outline: none;
 
   &:hover {
     background-color: lighten($brand-color, 15%);

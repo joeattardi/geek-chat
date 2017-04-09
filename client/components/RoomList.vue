@@ -7,7 +7,11 @@
         <span class="room-name">{{ room.name }}</span>
         <i class="fa fa-times leave-room" @click.stop="leaveRoom(room)"></i>
       </div>
-      <h3>Private Messages</h3>
+      <div id="create-container">
+        <button @click="showCreateModal = true">Create New Room</button>
+      </div>
+      <create-room-modal v-if="showCreateModal" @close="showCreateModal = false"/>
+      <!-- <h3>Private Messages</h3> -->
     </div>
     <div class="resize-handle"
          @mousedown="startResize"
@@ -18,11 +22,16 @@
 
 <script>
   import socketClient from '../socketClient';
+  import CreateRoomModal from './CreateRoomModal.vue';
 
   export default {
+    components: {
+      CreateRoomModal
+    },
     data() {
       return {
-        resizing: false
+        resizing: false,
+        showCreateModal: false
       };
     },
     computed: {
@@ -103,6 +112,11 @@
     #room-list {
       padding: 0.5em;
       flex-grow: 1;
+
+      #create-container {
+        text-align: center;
+        margin: 0.25em;
+      }
 
       h3 {
         margin: 0;

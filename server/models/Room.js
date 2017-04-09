@@ -8,7 +8,7 @@ const roomSchema = mongoose.Schema({
   },
   topic: {
     type: String,
-    required: true
+    required: false
   },
   admins: {
     type: [mongoose.Schema.Types.ObjectId],
