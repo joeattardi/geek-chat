@@ -11,5 +11,6 @@ module.exports = {
   JOIN_ROOM: 'joinRoom',
   LEAVE_ROOM: 'leaveRoom',
 
-  UPDATE_ROOM: 'updateRoom'
+  UPDATE_ROOM: 'updateRoom',
+  ROOM_DELETED: 'roomDeleted'
 };

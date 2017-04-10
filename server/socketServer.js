@@ -24,11 +24,15 @@ function getUserForSocket(socket) {
 
 exports.sendSystemMessage = function sendSystemMessage(message, roomId) {
   io.emit(chatConstants.SYSTEM_MESSAGE, message, roomId, new Date());
-}
+};
 
 exports.updateRoom = function updateRoom(room) {
   io.emit(chatConstants.UPDATE_ROOM, room);
-}
+};
+
+exports.deleteRoom = function deleteRoom(room) {
+  io.emit(chatConstants.ROOM_DELETED, room);
+};
 
 exports.init = function init(server) {
   io = new Server(server);

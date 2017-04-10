@@ -81,7 +81,21 @@ module.exports = {
         });
       }
 
+      const users = await User.find({ rooms: room._id })
+        .populate({
+          path: 'rooms',
+          model: 'Room'
+        });
+      if (users) {
+        users.forEach(async function (roomUser) {
+          roomUser.rooms = roomUser.rooms.filter(r => !(r._id.equals(room._id)));
+          await roomUser.save();
+        });
+      }
+
       await room.remove();
+
+      socketServer.deleteRoom(room);
 
       res.status(200).json({
         result: constants.API_RESULT_SUCCESS,

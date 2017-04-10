@@ -21,6 +21,12 @@ export default {
       store.commit('updateRoom', room);
     });
 
+    this.socket.on(chatConstants.ROOM_DELETED, room => {
+      store.commit('leaveRoom', room);
+      store.commit('setCurrentRoom', store.state.user.rooms[0]);
+      // TODO show notification that the room was deleted
+    });
+
     this.socket.on(chatConstants.CHAT_MESSAGE_TO_CLIENT, (user, text, room, timestamp) => {
       eventChannel.$emit(events.NEW_MESSAGE_FROM_SERVER, {
         type: MESSAGE_TYPE.CHAT_MESSAGE,
