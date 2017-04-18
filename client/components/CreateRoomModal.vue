@@ -14,11 +14,10 @@
     <div slot="footer">
       <button
         type="button"
-        :disabled="roomName.length === 0"
         @click="$emit('close')">
           Cancel
       </button>
-      <button @click="createRoom()">Create</button>
+      <button :disabled="roomName.length === 0" @click="createRoom()">Create</button>
     </div>
   </modal>
 </template>

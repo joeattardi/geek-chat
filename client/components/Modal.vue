@@ -93,16 +93,26 @@
   }
 
   @keyframes open {
-    0% { transform: scale(0.1); }
-    50% { transform: scale(1.2); }
-    75% { transform: scale(0.9); }
-    100% { transform: scale(1.0); }
+    0% {
+      opacity: 0;
+      transform: scale(0.1);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1.0);
+    }
   }
 
   @keyframes close {
-    0% { transform: scale(1.0); }
-    25% { transform: scale(0.9); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(0.1); }
+    0% {
+      opacity: 1;
+      transform: scale(1.0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(0.1);
+    }
   }
 </style>

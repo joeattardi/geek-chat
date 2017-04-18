@@ -8,7 +8,7 @@
     </div>
     <div slot="footer">
       <button type="button" @click="$emit('close')">Cancel</button>
-      <button :disabled="topic.length === 0" @click="save()">Save</button>
+      <button @click="save()">Save</button>
     </div>
   </modal>
 </template>

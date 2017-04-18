@@ -1,7 +1,7 @@
 <template>
   <modal @close="$emit('close')">
     <div slot="title">New Chat</div>
-    <div slot="body">
+    <div slot="body" @keyup="handleKeyup">
       <div id="room-modal-filter-container">
         <i class="fa fa-search" aria-hidden="true"></i>
         <input id="room-modal-filter" placeholder="Filter" v-model="filter" type="text" />
@@ -9,8 +9,12 @@
       <div v-if="loading" id="room-modal-spinner">
         <spinner color="#CCCCCC" />
       </div>
-      <div v-else id="room-modal-rooms">
-        <div @click="joinRoom(room)" class="room-modal-room" v-for="room in filteredRooms">
+      <div v-else id="room-modal-rooms" ref="roomContainer">
+        <div @click="joinRoom(room)"
+             :class="{ 'room-modal-room': true, selected: index === selectedIndex }"
+             v-for="(room, index) in filteredRooms"
+             :data-room-id="room._id"
+        >
           <i class="fa fa-users" aria-hidden="true"></i>
           {{room.name}}
         </div>
@@ -20,6 +24,8 @@
 </template>
 
 <script>
+  import _ from 'lodash';
+
   import Modal from './Modal.vue';
   import Spinner from './Spinner.vue';
   import socketClient from '../socketClient';
@@ -42,10 +48,31 @@
       return {
         rooms: [],
         filter: '',
+        selectedIndex: 0,
         loading: true
       };
     },
     methods: {
+      handleKeyup(event) {
+        switch (event.keyCode) {
+          case 40:
+            this.selectedIndex = Math.min(this.selectedIndex + 1, this.filteredRooms.length - 1);
+            this.scrollSelectedRoomIntoView();
+            break;
+          case 38:
+            this.selectedIndex = Math.max(0, this.selectedIndex - 1);
+            this.scrollSelectedRoomIntoView();
+            break;
+          case 13:
+            const selectedRoomId = this.$refs.roomContainer.querySelector('.selected').dataset.roomId;
+            const room = this.rooms.find(rm => rm._id === selectedRoomId);
+            this.joinRoom(room);
+            break;
+        }
+      },
+      scrollSelectedRoomIntoView() {
+        _.defer(() => this.$refs.roomContainer.querySelector('.selected').scrollIntoView());
+      },
       joinRoom(room) {
         if (!this.$store.state.user.rooms.find(userRoom => userRoom._id === room._id)) {
           this.$http.post(`/join/${room._id}`, {}, {
@@ -97,12 +124,15 @@
   #room-modal-rooms {
     height: 100px;
     overflow-y: scroll;
+    margin-top: 0.5em;
+    background-color: #FFFFFF;
+    border: 1px solid #AAAAAA;
 
     .room-modal-room {
       cursor: pointer;
       padding: 0.25em;
 
-      &:hover, &:focus {
+      &:hover, &:focus, &.selected {
         background-color: #CCCCCC;
       }
     }
